@@ -1,0 +1,39 @@
+{
+  "name": "char-insert-int",
+  "displayName": "Insert Character From Integer",
+  "description": "Insert a-Unicode-character by entering its integer code-point.",
+  "version": "0.0.2",
+  "date": "2026-04-03",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.charInsertInt",
+        "title": "Insert Character From Integer"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "extension.charInsertInt",
+        "key": "ctrl+alt+c i",
+        "mac": "cmd+alt+c i",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "echo \"No lint configured\"",
+    "test": "echo \"No tests configured\""
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0"
+  }
+}

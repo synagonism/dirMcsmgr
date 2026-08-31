@@ -1,0 +1,23 @@
+{
+  "name": "mcs-validator",
+  "version": "0.1.0",
+  "description": "Consistency checker for HitpMcs-concepts",
+  "type": "module",
+  "main": "validator.js",
+  "scripts": {
+    "check": "node Mcsmng/validator.js",
+    "check:ai": "node Mcsmng/validator.js --ai"
+  },
+  "bin": {
+    "dirMcsh": "Mcsmng/validator.js"
+  },
+  "dependencies": {
+    "@xenova/transformers": "^2.0.1",
+    "glob": "^11.0.0",
+    "lancedb": "^0.0.1",
+    "ollama": "^0.5.18"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

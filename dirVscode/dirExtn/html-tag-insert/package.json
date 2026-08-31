@@ -1,0 +1,31 @@
+{
+  "name": "html-tag-insert",
+  "displayName": "Html Tag Insert",
+  "version": "0.0.1",
+  "date": "2026-04-03",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "main": "./extension.js",
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [ ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.htmlTagInsert",
+        "title": "Html Tag Insert"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "extension.htmlTagInsert",
+        "key": "ctrl+alt+h t",
+        "mac": "cmd+alt+h t",
+        "when": "editorTextFocus"
+      }
+    ]
+  }
+}

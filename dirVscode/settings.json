@@ -1,0 +1,85 @@
+{
+    "editor.tabSize": 2,
+    "editor.minimap.enabled": false,
+    "editor.wordSeparators": "`~!@#%^&*()=+[{]}\\|;:\",<>/?.-'⇒",
+    "editor.linkedEditing": true,
+    "editor.stickyScroll.enabled": false,
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.language.brackets": [
+        ["(", ")"],
+        ["[", "]"],
+        ["{", "}"]
+    ],
+    "breadcrumbs.icons": false,
+    "codepoint.statusbar": "decimal",
+    "html.autoClosingTags": true,
+    "html.format.wrapLineLength": 74,
+    "macros.list": {
+    },
+    "[html]": {
+        "editor.suggest.insertMode": "replace",
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "@azure.argTenant": "",
+    "github.copilot.enable": {
+        "*": false,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false,
+        "html": true,
+        "javascript": true,
+        "jsonc": true
+    },
+    "vscodemacros.userMacroCommands": [ 
+    ],
+    "security.workspace.trust.untrustedFiles": "open",
+    "cSpell.userWords": [
+        "agentic",
+        "Bernal",
+        "Elln",
+        "evoluting",
+        "fintech",
+        "infotech",
+        "Kaseluris",
+        "lago",
+        "namidx",
+        "Nikos",
+        "occurences",
+        "ogzn",
+        "Sinagu",
+        "Sngu",
+        "Supertypes",
+        "Synagonism"
+    ],
+    "chat.viewSessions.orientation": "stacked",
+    "explorer.confirmDelete": false,
+    "chat.mcp.autostart": "never",
+    "editor.renderWhitespace": "boundary",
+    "accessibility.voice.speechTimeout": 555,
+    "llama-vscode.ask_install_llamacpp": false,
+    "extensions.ignoreRecommendations": true,
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": "C:\\WINDOWS\\System32\\cmd.exe",
+            "args": []
+        },
+        "Git Bash": {
+            "source": "Git Bash",
+            "icon": "terminal-git-bash"
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "Command Prompt",
+    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.cursorStyle": "line",
+    "terminal.integrated.fontSize": 12,
+    "claudeCode.preferredLocation": "panel",
+    "emmet.showExpandedAbbreviation": "never",
+    "workbench.browser.searchEngine": "google",
+    "workbench.browser.openLocalhostLinks": true,
+    "google-translate.firstLanguage": "en",
+    "breadcrumbs.enabled": false,
+}

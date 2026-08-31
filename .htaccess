@@ -1,0 +1,15 @@
+# Mcs WYSIWYG editor — cache control.
+#
+# When a page is opened INSIDE the VS Code editor its URL carries ?mcsw=1, and
+# because the scripts are same-origin the browser sends that page URL as the
+# Referer on each asset request. We use that to force revalidation of the
+# editor's JS/CSS (mMcsh2.js, mMcshEdit.js, ...) so the webview never serves a
+# stale copy after an edit. Normal site visitors have no "mcsw" in their Referer,
+# so their caching is completely unaffected.
+<IfModule mod_headers.c>
+  SetEnvIf Referer "mcsw" MCSW_EDIT
+  SetEnvIf Referer "mcsv" MCSW_EDIT
+  <FilesMatch "\.(js|mjs|css)$">
+    Header set Cache-Control "no-cache, must-revalidate" env=MCSW_EDIT
+  </FilesMatch>
+</IfModule>

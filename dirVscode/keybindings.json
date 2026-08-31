@@ -1,0 +1,1499 @@
+// {2026-08-21}
+// Place your key bindings in this file to override the defaults
+// ctrl+k ctrl+2 folds them and shows shortcuts
+[
+
+// SYMBOLS
+// =:: selected-number increase
+{
+  "key": "ctrl+alt+=", 
+  "command": "editor.emmet.action.incrementNumberByOne",
+  "when": "editorTextFocus && editorHasSelection"
+},
+// -:: selected-number decrease
+{
+  "key": "ctrl+alt+-", 
+  "command": "editor.emmet.action.decrementNumberByOne",
+  "when": "editorTextFocus && editorHasSelection"
+},
+
+// C:: CHARACTERS
+// c a 1:: Char Arrow 1: ⭢
+{
+  "key": "ctrl+alt+c a 1", 
+  "command": "type",
+  "args": {"text": "⭢"},
+},
+// c a 2:: Char Arrow 2: ⇒
+{
+  "key": "ctrl+alt+c a 2", 
+  "command": "type",
+  "args": {"text": "⇒"},
+},
+// c h g:: Char Html Greaterthan: & gt;
+{
+  "key": "ctrl+alt+c h g", 
+  "command": "type",
+  "args": {"text": "&gt;"},
+},
+// c h l:: Char Html Leshthan: & lt;
+{
+  "key": "ctrl+alt+c h l", 
+  "command": "type",
+  "args": {"text": "&lt;"},
+},
+// c h s:: Char Html Space: & nbsp;
+{
+  "key": "ctrl+alt+c h s", 
+  "command": "type",
+  "args": {"text": "&nbsp;"},
+  "when": "editorTextFocus"
+},
+// c i:: Char Integer: extension
+// c l:: Char Letter-notation
+{
+  "key": "ctrl+alt+c l", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "⟨${TM_SELECTED_TEXT}⟩"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// c p b:: Char hitP insert line Break
+{
+  "key": "ctrl+alt+c p b", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorHome",
+      "cursorHome",
+      { "command": "type", "args": { "text": "    <br>" } },
+      "cursorDown"
+    ]
+  }
+},
+// c p e:: Char hitP name Equal: !=
+{
+  "key": "ctrl+alt+c p e",  
+  "command": "type",
+  "args": {"text": "!="},
+  "when": "editorTextFocus"
+},
+// c p k:: Char hitP Key-value-info: <br>×
+{
+  "key": "ctrl+alt+c p k", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      { "command": "type", "args": {"text": "<br>× "} }
+    ]
+  }
+},
+// c p m:: Char hitP name Main: !⇒
+{
+  "key": "ctrl+alt+c p m",  
+  "command": "type",
+  "args": {"text": "!⇒"},
+  "when": "editorTextFocus"
+},
+// c p s:: Char hitP Sentence: <br>·
+{
+  "key": "ctrl+alt+c p s", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      { "command": "type", "args": {"text": "<br>· "} }
+    ]
+  }
+},
+
+// D::
+
+// H:: HTML
+// h ,:: Hitp replace next "<" with "&lt;"
+{
+  "key": "ctrl+alt+h ,", // Hitp replace next "<" with "&lt;"
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": "<",
+          "replaceString": "&lt;",
+          "isRegex": false, "matchWholeWord": false,
+          "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      "editor.action.nextMatchFindAction",
+      "editor.action.replaceOne",
+      "closeFindWidget",
+    ]
+  }
+},
+// h .:: Hitp replace next ">" with "&gt;"
+{
+  "key": "ctrl+alt+h .", // Hitp replace next ">" with "&gt;"
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": ">",
+          "replaceString": "&gt;",
+          "isRegex": false, "matchWholeWord": false,
+          "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      "editor.action.nextMatchFindAction",
+      "editor.action.replaceOne",
+      "closeFindWidget",
+    ]
+  }
+},
+// h b:: Html Bold
+{
+  "key": "ctrl+alt+h b", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "<strong>${TM_SELECTED_TEXT}</strong>"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// h c d:: Html CoDe
+{
+  "key": "ctrl+alt+h c d", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "<code>${TM_SELECTED_TEXT}</code>"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// h c m:: Html CoMment
+{
+  "key": "ctrl+alt+h c m", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      { "command": "type", "args": {"text": "<!--  -->"} },
+      "cursorLeft",
+      "cursorLeft",
+      "cursorLeft",
+      "cursorLeft",
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// HTML LINK
+// h l i:: Html Link Insert
+{
+  "key": "ctrl+alt+h l i", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      { "command": "editor.action.insertSnippet",
+        "args": {"snippet": "<a href=\"\">${TM_SELECTED_TEXT}</a>"}
+      },
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": "href=\"", "isRegex": false,
+          "matchWholeWord": false, "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      "editor.action.previousMatchFindAction",
+      "closeFindWidget",
+      "cursorRight",
+      "extension.userInput",
+      "cursorRight",
+    ]
+  },
+  "when": "editorTextFocus && editorHasSelection"
+},
+// h l s:: Html Link Selection
+{
+  "key": "ctrl+alt+h l s", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "a href=\"#${TM_SELECTED_TEXT}\">${TM_SELECTED_TEXT}</a>"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// h t:: Html Tag
+{
+  "key": "ctrl+alt+h t", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      { "command": "editor.action.insertSnippet",
+        "args": {"snippet": "<>${TM_SELECTED_TEXT}</>"}
+      },
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": "<>", "isRegex": false,
+          "matchWholeWord": false, "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      "editor.action.previousMatchFindAction",
+      "closeFindWidget",
+      "cursorLeft",
+      "cursorRight",
+      "extension.userInput",
+      { "command": "editor.action.clipboardCopyAction", "await": "clipboard" },
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": "</", "isRegex": false,
+          "matchWholeWord": false, "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      "editor.action.nextMatchFindAction",
+      "closeFindWidget",
+      "cursorRight",
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" }
+    ]
+  },
+  "when": "editorTextFocus && editorHasSelection"
+},
+
+
+// MACRO 
+// m c:: Macro Copy recording
+{
+  "key": "ctrl+alt+m c", 
+  "command": "kb-macro.copyMacroAsKeybinding",
+  "when": "editorTextFocus"
+},
+// m r:: Macro Recording
+{
+  "key": "ctrl+alt+m r", 
+  "command": "kb-macro.startRecording",
+  "when": "!kb-macro.recording"
+},
+// m r:: Macro stop Recording
+{
+  "key": "ctrl+alt+m r", 
+  "command": "kb-macro.finishRecording",
+  "when": "kb-macro.recording"
+},
+// m p:: Macro Cancel recording
+{
+  "key": "ctrl+alt+m p", 
+  "command": "kb-macro.cancelRecording",
+  "when": "kb-macro.recording"
+},
+// m p:: Macro Playback
+{
+  "key": "ctrl+alt+m p", 
+  "command": "kb-macro.playback",
+  "when": "!kb-macro.recording"
+},
+// m escape:: Macro stop playback
+{
+  "key": "ctrl+alt+m escape", 
+  "command": "kb-macro.abortPlayback",
+  "when": "kb-macro.playing"
+},
+
+// HITP
+// p n a:: hitP Break
+{
+  "key": "ctrl+alt+p b", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>"}},
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// HITP COLOR
+// p c b:: hitP Color Blue
+{
+  "key": "ctrl+alt+p c b", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "<span class=\"clsColorBlue\">${TM_SELECTED_TEXT}</span>"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// p c g:: hitP Color Green
+{
+  "key": "ctrl+alt+p c g", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "<span class=\"clsColorGreen\">${TM_SELECTED_TEXT}</span>"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// p c r:: hitP Color Red
+{
+  "key": "ctrl+alt+p c r", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "<span class=\"clsColorRed\">${TM_SELECTED_TEXT}</span>"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// HITP DATE
+// p d:: hitP insert Date: {2026-03-30} 
+{
+  "key": "ctrl+alt+p d", 
+  "command": "editor.action.insertSnippet",
+  "args": { "snippet": "{${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}} " },
+  "when": "editorTextFocus"
+},
+// HITP ELEMENT
+// p e a:: hitP Element Audio
+{
+  "key": "ctrl+alt+p e a", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      "cursorHomeSelect",
+      {"command": "type", "args": {"text": "    <span class=\"clsAudio\">"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "  <button class=\"clsAudioBtn\">🗣</button>"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<audio src=\"dirLagFile/dirPhoneme/.mp3\"></audio>"}},
+      "editor.action.insertLineAfter",
+      "deleteLeft",
+      {"command": "type", "args": {"text": "</span>"}},
+      "cursorUp",
+      "cursorLineEnd",
+      "cursorWordLeft",
+      "cursorWordLeft",
+      "cursorWordLeft",
+      "cursorLeft",
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// HITP FORMAT
+// p f u:: hitP Format Underline
+{
+  "key": "ctrl+alt+p f u", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "<span class=\"clsU\">${TM_SELECTED_TEXT}</span>"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// HITP HEADING
+// p h d:: hitP Heading Decrease
+{
+  "key": "ctrl+alt+p h d", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": "<h", "isRegex": false,
+          "matchWholeWord": false, "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      "editor.action.nextMatchFindAction",
+      "closeFindWidget",
+      "cursorRight",
+      "cursorRightSelect",
+      "editor.emmet.action.decrementNumberByOne",
+      { "command": "editor.action.clipboardCopyAction", "await": "clipboard" },
+      "cursorWordEndRight",
+      "cursorWordEndRight",
+      "cursorWordEndRight",
+      "deleteLeft",
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      "cursorDown",
+      "cursorEnd",
+      "cursorLeft",
+      "deleteLeft",
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      "cursorWordLeft",
+      "cursorWordLeft",
+      "cursorWordLeft",
+      "cursorWordLeft",
+      "deleteLeft",
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      "cursorEnd",
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// p h i:: hitP Heading Increase
+{
+  "key": "ctrl+alt+p h i", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": "<h", "isRegex": false,
+          "matchWholeWord": false, "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      "editor.action.nextMatchFindAction",
+      "closeFindWidget",
+      "cursorRight",
+      "cursorRightSelect",
+      "editor.emmet.action.incrementNumberByOne",
+      { "command": "editor.action.clipboardCopyAction", "await": "clipboard" },
+      "cursorWordEndRight",
+      "cursorWordEndRight",
+      "cursorWordEndRight",
+      "deleteLeft",
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      "cursorDown",
+      "cursorEnd",
+      "cursorLeft",
+      "deleteLeft",
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      "cursorWordLeft",
+      "cursorWordLeft",
+      "cursorWordLeft",
+      "cursorWordLeft",
+      "deleteLeft",
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      "cursorEnd",
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// HITP LINK
+// p l i:: hitP Linkpreview Insert
+{
+  "key": "ctrl+alt+p l i", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      { "command": "editor.action.insertSnippet",
+        "args": {"snippet": "<a class=\"clsPreview\" href=\"\">${TM_SELECTED_TEXT}</a>"}
+      },
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": "href=\"", "isRegex": false,
+          "matchWholeWord": false, "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      "editor.action.previousMatchFindAction",
+      "closeFindWidget",
+      "cursorRight",
+    ]
+  },
+  "when": "editorTextFocus && editorHasSelection"
+},
+// p l s:: hitP Linkpreview Selection
+{
+  "key": "ctrl+alt+p l s", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "<a class=\"clsPreview\" href=\"#${TM_SELECTED_TEXT}\">${TM_SELECTED_TEXT}</a>"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// HITP NAME
+// p n a:: hitP Name Arab-arabic
+{
+  "key": "ctrl+alt+p n a", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoArabic:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsArab.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name Deut-german
+{
+  "key": "ctrl+alt+p n d", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoGerman:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsDeut.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name EllA-greekancient
+{
+  "key": "ctrl+alt+p n e a", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoGreekAncient:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsElla.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name ELln-greek
+{
+  "key": "ctrl+alt+p n e l", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoGreek:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsElln.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name ESpo-esperanto
+{
+  "key": "ctrl+alt+p n e s", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoEsperanto:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsEspo.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name Frac-frence
+{
+  "key": "ctrl+alt+p n f", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoFrence:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsFrac.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name Hindi
+{
+  "key": "ctrl+alt+p n h", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoHindi:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsHind.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name Italian
+{
+  "key": "ctrl+alt+p n i", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoItalian:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsItln.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name Japanese
+{
+  "key": "ctrl+alt+p n j", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoJapanese:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsJpns.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name KHmer
+{
+  "key": "ctrl+alt+p n k h", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoKhmer:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsKhmr.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name KoRean
+{
+  "key": "ctrl+alt+p n k r", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoKorean:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsKora.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name Romanean
+{
+  "key": "ctrl+alt+p n r", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoRomanean:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsRomn.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name SiNagu
+{
+  "key": "ctrl+alt+p n s n", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoSinagu:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsSngu.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// Bosnian-Croatian-Montenegrin-Serbian
+{
+  "key": "ctrl+alt+p n s b", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoSlavoBcms:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsSbos.,"}}, // Bosnian
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsShrv.,"}}, // Hrivatski
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsScnr.,"}}, // Tsirnogorski
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsSsrp.,"}}, // Sripski
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name SlavoBuLgarian
+{
+  "key": "ctrl+alt+p n s l", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoSlavoBulgarian:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsSbul.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name SlavoMacedonian
+{
+  "key": "ctrl+alt+p n s m", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoSlavoMacedonian:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsSmkd.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name SQip-albanian
+{
+  "key": "ctrl+alt+p n s q", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoAlbanian:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsSqip.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name SlavoRussian
+{
+  "key": "ctrl+alt+p n s r", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoSlavoRussian:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsSrus.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name SlavoSlovenian
+{
+  "key": "ctrl+alt+p n s s", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoSlavoSlovenian:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsSslv.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name SPan-spanish
+{
+  "key": "ctrl+alt+p n s p", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoSpanish:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsSpan.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name Turkish
+{
+  "key": "ctrl+alt+p n t", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoTurkish:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsTurk.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name Vietnamese
+{
+  "key": "ctrl+alt+p n v", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoVietnamese:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsVnma.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Name Zhon-chinese
+{
+  "key": "ctrl+alt+p n z", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>====== lagoChinese:"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>* McsZhon.,"}},
+      "cursorLeft"
+    ]
+  },
+  "when": "editorTextFocus"
+},
+
+// p o:: hitP Open current .last.html in local server (integrated browser, zero-click)
+{
+  "key": "ctrl+alt+p o",
+  "command": "mcs.openInLocalServer",
+  "when": "resourceFilename =~ /\\.last\\.html$/"
+},
+
+// hitP Paragraph
+// hitP Paragraph Address
+{
+  "key": "ctrl+alt+p p a", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorEnd",
+      "editor.action.insertLineAfter",
+      "deleteLeft",
+      { "command": "type", "args": { "text": "<p id=\"ididid" } },
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": "<section", "isRegex": false, "matchWholeWord": false,
+          "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      { "command": "editor.action.previousMatchFindAction" },
+      { "command": "closeFindWidget" },
+      { "command": "cursorRight" },
+      { "command": "cursorWordEndRight" },
+      { "command": "cursorWordEndRight" },
+      { "command": "cursorWordEndRightSelect" },
+      { "command": "editor.action.clipboardCopyAction", "await": "clipboard" },
+      { "command": "cursorRight" },
+      { "command": "editor.actions.findWithArgs",
+        "args": {
+          "searchString": "ididid", "isRegex": false, "matchWholeWord": false,
+          "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      { "command": "editor.action.nextMatchFindAction" },
+      { "command": "closeFindWidget" },
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      { "command": "type", "args": { "text": "wpa\">addressWpg::" }},
+      { "command": "type", "args": { "text": "\n  <br>× Mcsh-creation: " } },
+      { "command": "editor.action.insertSnippet",
+        "args": { "snippet": "{${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}} " } },
+      { "command": "deleteLeft" },
+      { "command": "type", "args": { "text": ",\n<br>* \n<a class=\"clsHide\" href=\"#" } },
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      { "command": "type", "args": { "text": "wpa\"></a></p>" } },
+      { "command": "cursorUp" }
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Paragraph Description
+{
+  "key": "ctrl+alt+p p d", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorEnd",
+      "editor.action.insertLineAfter",
+      "deleteLeft",
+      { "command": "type", "args": { "text": "<p id=\"ididid" } },
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": "<section", "isRegex": false, "matchWholeWord": false,
+          "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      { "command": "editor.action.previousMatchFindAction" },
+      { "command": "closeFindWidget" },
+      { "command": "cursorRight" },
+      { "command": "cursorWordEndRight" },
+      { "command": "cursorWordEndRight" },
+      { "command": "cursorWordEndRightSelect" },
+      { "command": "editor.action.clipboardCopyAction", "await": "clipboard" },
+      { "command": "cursorRight" },
+      { "command": "editor.actions.findWithArgs",
+        "args": {
+          "searchString": "ididid", "isRegex": false, "matchWholeWord": false,
+          "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      { "command": "editor.action.nextMatchFindAction" },
+      { "command": "closeFindWidget" },
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      { "command": "type", "args": { "text": "dsn\">description::" }},
+      { "command": "type", "args": { "text": "\n<br>× Mcsh-creation: " } },
+      { "command": "editor.action.insertSnippet",
+        "args": { "snippet": "{${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}} " } },
+      { "command": "deleteLeft" },
+      { "command": "type", "args": { "text": ",\n<br>· \n<a class=\"clsHide\" href=\"#" } },
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      { "command": "type", "args": { "text": "dsn\"></a></p>" } },
+      { "command": "cursorUp" }
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Paragraph Generic
+{
+  "key": "ctrl+alt+p p g", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorEnd",
+      "editor.action.insertLineAfter",
+      "deleteLeft",
+      { "command": "type", "args": { "text": "<p id=\"ididid" } },
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": "<section", "isRegex": false, "matchWholeWord": false,
+          "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      { "command": "editor.action.previousMatchFindAction" },
+      { "command": "closeFindWidget" },
+      { "command": "cursorRight" },
+      { "command": "cursorWordEndRight" },
+      { "command": "cursorWordEndRight" },
+      { "command": "cursorWordEndRightSelect" },
+      { "command": "editor.action.clipboardCopyAction", "await": "clipboard" },
+      { "command": "cursorRight" },
+      { "command": "editor.actions.findWithArgs",
+        "args": {
+          "searchString": "ididid", "isRegex": false, "matchWholeWord": false,
+          "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      { "command": "editor.action.nextMatchFindAction" },
+      { "command": "closeFindWidget" },
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      { "command": "type", "args": { "text": "gtr\">generic-tree::" }},
+      { "command": "type", "args": { "text": "\n  <br>× Mcsh-creation: " } },
+      { "command": "editor.action.insertSnippet",
+        "args": { "snippet": "{${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}} " } },
+      { "command": "deleteLeft" },
+      { "command": "type", "args": { "text": ",\n<br>× generic: \n<a class=\"clsHide\" href=\"#" } },
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      { "command": "type", "args": { "text": "gtr\"></a></p>" } },
+      { "command": "cursorUp" }
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Paragraph Name
+{
+  "key": "ctrl+alt+p p n", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorEnd",
+      "editor.action.insertLineAfter",
+      "deleteLeft",
+      { "command": "type", "args": { "text": "<p id=\"ididid" } },
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": "<section", "isRegex": false, "matchWholeWord": false,
+          "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      { "command": "editor.action.previousMatchFindAction" },
+      { "command": "closeFindWidget" },
+      { "command": "cursorRight" },
+      { "command": "cursorWordEndRight" },
+      { "command": "cursorWordEndRight" },
+      { "command": "cursorWordEndRightSelect" },
+      { "command": "editor.action.clipboardCopyAction", "await": "clipboard" },
+      { "command": "cursorRight" },
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": "ididid", "isRegex": false, "matchWholeWord": false,
+          "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      { "command": "editor.action.nextMatchFindAction" },
+      { "command": "closeFindWidget" },
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      { "command": "type", "args": { "text": "nam\">name::\n<br>* McsEngl.,\n<a class=\"clsHide\" href=\"#" } },
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      { "command": "type", "args": { "text": "nam\"></a></p>" } },
+      { "command": "cursorUp" },
+      { "command": "cursorLeft" }
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// hitP Paragraph (P)description and name
+{
+  "key": "ctrl+alt+p p p", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorEnd",
+      "editor.action.insertLineAfter",
+      "deleteLeft",
+      { "command": "type", "args": { "text": "<p id=\"ididid" } },
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": "<section", "isRegex": false, "matchWholeWord": false,
+          "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      { "command": "editor.action.previousMatchFindAction" },
+      { "command": "closeFindWidget" },
+      { "command": "cursorRight" },
+      { "command": "cursorWordEndRight" },
+      { "command": "cursorWordEndRight" },
+      { "command": "cursorWordEndRightSelect" },
+      { "command": "editor.action.clipboardCopyAction", "await": "clipboard" },
+      { "command": "cursorRight" },
+      { "command": "editor.actions.findWithArgs",
+        "args": {
+          "searchString": "ididid", "isRegex": false, "matchWholeWord": false,
+          "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      { "command": "editor.action.nextMatchFindAction" },
+      { "command": "closeFindWidget" },
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      { "command": "type", "args": { "text": "dsn\">description::" }},
+      { "command": "type", "args": { "text": "\n<br>× Mcsh-creation: " } },
+      { "command": "editor.action.insertSnippet",
+        "args": { "snippet": "{${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}}" } },
+      { "command": "type", "args": { "text": "\n<br>· \n<a class=\"clsHide\" href=\"#" } },
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      { "command": "type", "args": { "text": "dsn\"></a></p>" } },
+      // name
+      { "command": "editor.action.insertLineAfter" },
+      { "command": "deleteLeft" },
+      { "command": "type", "args": { "text": "<p id=\"" } },
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      { "command": "type", "args": { "text": "nam\">name::\n<br>* McsEngl.,\n<a class=\"clsHide\" href=\"#" } },
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+      { "command": "type", "args": { "text": "nam\"></a></p>" } },
+      { "command": "cursorUp" },
+      { "command": "cursorLeft" },
+
+      { "command": "cursorUp" },
+      { "command": "cursorUp" },
+      { "command": "cursorUp" },
+      { "command": "cursorUp" },
+      { "command": "cursorUp" },
+      { "command": "cursorUp" },
+      { "command": "cursorUp" },
+      { "command": "cursorWordEndRight" },
+      { "command": "cursorWordEndRight" },
+      { "command": "cursorEndSelect", "args": { "sticky": false } },
+      { "command": "editor.action.clipboardCopyAction", "await": "clipboard" },
+      { "command": "cursorDown" },
+      { "command": "cursorDown" },
+      { "command": "cursorDown" },
+      { "command": "cursorDown" },
+      { "command": "cursorDown" },
+      { "command": "cursorDown" },
+      { "command": "cursorDown" },
+      { "command": "cursorLeft" },
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" }
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// HITP RESOURCE
+// hitP insert Resource Resource
+{
+  "key": "ctrl+alt+p r r", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      { "command": "type", "args": {"text": "<br>["},
+      },
+      {"command": "editor.action.insertSnippet",
+        "args": { "snippet": "{${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE} retrieved} ]" }
+      },
+      "cursorLeft",
+    ]
+  }
+},
+// hitP insert Resource hmnSngu
+{
+  "key": "ctrl+alt+p r s", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      { "command": "type", "args": {"text": "<br>[<a class=\"clsPreview\" href=\"../dirHmn/McsHmn000003.last.html#idOverview\">humnSngu</a>."},
+      },
+      {"command": "editor.action.insertSnippet",
+        "args": { "snippet": "{${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}}]" }
+      },
+      "cursorRight"
+    ]
+  }
+},
+// HITP SYNTAX
+// hitP Syntax Argument-other
+{
+  "key": "ctrl+alt+p s a",
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      {"command": "editor.action.insertSnippet",
+       "args": {"snippet": "_sntxArgt:[${TM_SELECTED_TEXT}]"}
+      },
+      "editor.action.jumpToBracket",
+      "cursorLeft",
+    ]
+  },
+  "when": "editorTextFocus && editorHasSelection",
+},
+// hitP Syntax Cause
+{
+  "key": "ctrl+alt+p s c", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "_sntxCause:[${TM_SELECTED_TEXT}]"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// hitP Syntax Direction
+{
+  "key": "ctrl+alt+p s d", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "_sntxDirection:[${TM_SELECTED_TEXT}]"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// hitP Syntax Effect
+{
+  "key": "ctrl+alt+p s e", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "_sntxEffect:[${TM_SELECTED_TEXT}]"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// hitP Syntax Frequency
+{
+  "key": "ctrl+alt+p s f", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "_sntxFreq:[${TM_SELECTED_TEXT}]"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// hitP Syntax Goal
+{
+  "key": "ctrl+alt+p s g", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "_sntxGoal:[${TM_SELECTED_TEXT}]"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// hitP Syntax Manner
+{
+  "key": "ctrl+alt+p s m", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "_sntxManner:[${TM_SELECTED_TEXT}]"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// hitP Syntax subject
+{
+  "key": "ctrl+alt+p s s", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "_sntxSubj:[${TM_SELECTED_TEXT}]"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// hitP Syntax K-subject-complement
+{
+  "key": "ctrl+alt+p s k", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "_sntxSbjc:[${TM_SELECTED_TEXT}]"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// hitP Syntax Time
+{
+  "key": "ctrl+alt+p s t", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "_sntxTime:[${TM_SELECTED_TEXT}]"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// hitP Syntax Object
+{
+  "key": "ctrl+alt+p s o", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "_sntxObj1:[${TM_SELECTED_TEXT}]"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// hitP Syntax oUtput
+{
+  "key": "ctrl+alt+p s u", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "_sntxOutput:[${TM_SELECTED_TEXT}]"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// hitP Syntax sPace
+{
+  "key": "ctrl+alt+p s p", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "_sntxSpace:[${TM_SELECTED_TEXT}]"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// hitP Syntax Quantity
+{
+  "key": "ctrl+alt+p s q", 
+  "command": "editor.action.insertSnippet",
+  "args": {"snippet": "_sntxQuant:[${TM_SELECTED_TEXT}]"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// hitP Syntax Verb
+{
+  "key": "ctrl+alt+p s v", 
+  "command": "editor.action.insertSnippet", 
+  "args": {"snippet": "_sntxVerb:{${TM_SELECTED_TEXT}}"},
+  "when": "editorTextFocus && editorHasSelection"
+},
+// hitP Syntax Language
+// p s l e n:: hitP Syntax Language ENgl-english
+{
+  "key": "ctrl+alt+p s l e n", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>· _sntxEngl: "}},
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// p s l e l:: hitP Syntax Language ELln-greek
+{
+  "key": "ctrl+alt+p s l e l", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>· _sntxElln: "}},
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// p s l z:: hitP Syntax Language Zhon-Chinese
+{
+  "key": "ctrl+alt+p s l z", 
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>"}},
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>· _sntxZhon: "}},
+    ]
+  },
+  "when": "editorTextFocus"
+},
+// HITP SAVE
+// p v 1:: hitP saVe major versioning
+// p v 2:: hitP saVe minor versioning
+{
+  "key": "ctrl+alt+p v 2",
+  "command": "runCommands",
+  "args": {
+    "commands": [
+      "cursorTop",
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": "<title>",
+          "isRegex": false, "matchWholeWord": false,
+          "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": "\\((?:Mcs|Hitp)[^-\n]+-",
+          "isRegex": true, "matchWholeWord": false,
+          "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      "editor.action.nextMatchFindAction",
+      "cursorRight",
+      "closeFindWidget",
+      {"command": "type", "args": {"text": " "}},
+      "cursorWordEndRight",
+      { "command": "type", "args": { "text": " " } },
+      "cursorLeft",
+      "cursorWordLeftSelect",
+      "editor.emmet.action.incrementNumberByOne",
+      "cursorLeft",
+      "deleteLeft",
+      "cursorWordEndRight",
+      "deleteRight",
+      "cursorWordEndRight",
+      "cursorRight",
+      "cursorWordEndRightSelect",
+      "cursorWordEndRightSelect",
+      "cursorWordEndRightSelect",
+      "deleteRight",
+      { "command": "editor.action.insertSnippet",
+        "args": { "snippet": "${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}" },
+      }
+    ]
+  }
+},
+// p v 3:: hitP saVe patch versioning
+
+// ctrl+alt+t:: user input EXTENSION
+
+// CUSTOM VSCODE SHORTCUTS
+// ctrl+alt+u:: shows char Unicode-codepoint in different formats
+{
+  "key": "ctrl+alt+u", 
+  "command": "codepoint.describe",
+  "when": "editorTextFocus"
+},
+// ctrl+alt+\:: selectToBracket
+{
+  "key": "ctrl+alt+\\",
+  "command": "editor.action.selectToBracket"
+},
+// shift+alt+\:: matchTag
+{
+  "key": "shift+alt+\\",
+  "command": "editor.emmet.action.matchTag"
+},
+// ctrl+shift+alt+backspace:: go parent fold
+{
+  "key": "ctrl+shift+alt+backspace",
+  "command": "editor.gotoParentFold",
+  "when": "editorTextFocus"
+},
+// ctrl+shift+alt+\:: go next fold
+{
+  "key": "ctrl+shift+alt+\\",
+  "command": "editor.gotoNextFold"
+},
+
+// ============ misc test ===========
+// F6
+{
+  "key": "F6",
+  "command": "runCommands",
+  "args": {
+    "commands": [
+        { "command": "cursorHome" },
+        { "command": "cursorWordEndRight" },
+        { "command": "cursorRight" },
+        { "command": "cursorWordEndRightSelect" },
+        { "command": "cursorWordEndRightSelect" },
+        { "command": "cursorRightSelect" },
+      { "command": "type", "args": {"text": "· _sntxEngl: "} },
+        { "command": "cursorDown" }
+
+  /*      
+      // set break in line
+      "cursorHome",
+      "cursorHome",
+      { "command": "type", "args": {"text": "    <br>"} },
+      "cursorDown",
+  */
+    ]
+  }
+},
+]
+
+/*
+
+      // FIND
+      { "command": "editor.actions.findWithArgs",
+        "args": { 
+          "searchString": "<h",
+          "replaceString": '...',
+          "isRegex": false, "matchWholeWord": false,
+          "isCaseSensitive": false, "findInSelection": false
+         }
+      },
+      "editor.action.nextMatchFindAction",
+      "editor.action.previousMatchFindAction",
+      "editor.action.replaceOne",
+      "closeFindWidget",
+      { "command": "editor.action.startFindReplaceAction" },
+      { "command": "editor.action.replaceOne" },
+      { "command": "closeFindWidget" }
+
+      "cursorUp",
+      "cursorLineEnd",
+      "editor.action.insertLineAfter",
+      {"command": "type", "args": {"text": "<br>"}},
+
+      // SNIPPET
+      { "command": "editor.action.insertSnippet",
+        "args": { "snippet": "{${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}} " },
+      }
+
+      // COPY
+      { "command": "editor.action.clipboardCopyAction", "await": "clipboard" },
+      { "command": "editor.action.clipboardPasteAction", "await": "document selection" },
+
+      // 
+      "editor.action.transformToLowercase",
+      "extension.charInsertInt",
+      "extension.userInput",
+      "editor.emmet.action.incrementNumberByOne"
+
+*/

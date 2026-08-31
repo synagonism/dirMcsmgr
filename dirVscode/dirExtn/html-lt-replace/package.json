@@ -1,0 +1,35 @@
+{
+  "name": "html-lt-replace",
+  "displayName": "Html LessThan Replace",
+  "description": "Replaces next '<' with '&lt;'",
+  "version": "0.0.1",
+  "date": "2026-04-03",
+  "publisher": "local",
+  "main": "./extension.js",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.htmlLtReplace",
+        "title": "Replace Next < with &lt;"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "extension.htmlLtReplace",
+        "key": "ctrl+alt+h ,",
+        "mac": "cmd+alt+h ,",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "activationEvents": [],
+  "scripts": {
+    "test": "echo \"No tests yet\""
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0"
+  }
+}

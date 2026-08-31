@@ -1,0 +1,30 @@
+{
+  "name": "user-input",
+  "displayName": "User Input Text",
+  "version": "0.0.1",
+  "date": "2026-04-04",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "main": "./extension.js",
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [ ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.userInput",
+        "title": "User Input Text"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "extension.userInput",
+        "key": "ctrl+alt+t",
+        "when": "editorTextFocus"
+        }
+    ]
+  }
+}

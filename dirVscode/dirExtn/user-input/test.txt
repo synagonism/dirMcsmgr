@@ -1,0 +1,17 @@
+aaa
+<code>aaabbb</code>
+<!--  -->
+
+<section id="idLagJselarc">
+  <h2 id="idLagJselarcH2">archetype of lagJsel
+    <a class="clsHide" href="#idLagJselarcH2"></a></h2>
+  <p id="idLagJselarcdsn">description::
+    <br>× Mcsh-creation: {2026-04-07},
+    <br>· 
+    <a class="clsHide" href="#idLagJselarcdsn"></a></p>
+  <p id="idLagJselarcnam">name:
+    <br>* McsEngl.,
+    <a class="clsHide" href="#idLagJselarcnam"></a></p>
+</section>
+
+<a class="clsPreview" href="#abc">aaabbb</a>

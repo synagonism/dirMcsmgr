@@ -1,0 +1,22 @@
+{
+  "name": "mcs-open-local-server",
+  "displayName": "Mcs Open in Local Server",
+  "description": "Open the active file in the integrated browser via the XAMPP local server (htdocs -> http://localhost/).",
+  "version": "1.0.0",
+  "publisher": "synagonism",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mcs.openInLocalServer",
+        "title": "Mcs: Open in Local Server"
+      }
+    ]
+  }
+}
