@@ -58,6 +58,7 @@
 const
   // contains the-versions of mMcsh2.js
   aVersion = [
+    'mMcsh2.js.25-0-1.2026-09-01: Site-Home',
     'mMcsh2.js.25-0-0.2026-08-30: dirMcsmgr',
     'mMcsh2.js.24-10-0.2026-08-28: dblclick trim',
     'mMcsh2.js.24-9-0.2026-08-21: claude-code eval',
@@ -470,12 +471,12 @@ let fContainersInsert = function () {
   })
   oEltCnrTopDiv.insertBefore(oEltCnrTopHomeIcnI, oEltCnrTopDiv.firstChild)
   // home-icn
-  oEltCnrTopHomeIcnI.setAttribute('title', 'Home-webpage')
+  oEltCnrTopHomeIcnI.setAttribute('title', 'Site-Home')
   oEltCnrTopHomeIcnI.setAttribute('class', 'clsFa clsFaHome clsTopIcn clsColorWhite clsFloatLeft')
   oEltCnrTopHomeIcnI.addEventListener('click', function () {
     oEltClicked.classList.remove('clsClicked', 'clsTtpShow', 'clsTriClicked')
     oEltClicked = oEltCnrTopHomeIcnI
-    location.href = sPathSite + sWorldview + '/index.html' //nnnFv
+    location.href = sPathSite + '/index.html' //nnnFv
   })
   oEltCnrTopDiv.insertBefore(oEltCnrTopMenuIcnI, oEltCnrTopDiv.firstChild)
 
