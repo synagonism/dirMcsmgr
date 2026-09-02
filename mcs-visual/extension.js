@@ -341,6 +341,7 @@ function fCreateProvider(context) {
           case 'ready': break;                       // ids are sent from `nav` (below)
           case 'save': if (oActiveDoc) await oActiveDoc.save(); break; // Ctrl+S from the iframe
           case 'open': fOpenByCode(); break;                           // Ctrl+Alt+P O from the iframe
+          case 'maximizeGroup': vscode.commands.executeCommand('workbench.action.toggleMaximizeEditorGroup'); break; // Ctrl+K Ctrl+M
           case 'cmdPalette': vscode.commands.executeCommand('workbench.action.showCommands'); break; // Ctrl+Shift+P from the iframe
           case 'nav': await fOnNavigate(msg.href); break;
           case 'url': fToChrome({ type: 'setUrl', url: msg.href }); break; // hash jump: address bar only

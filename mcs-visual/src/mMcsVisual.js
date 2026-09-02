@@ -448,6 +448,25 @@ export function fInitMcsv_bridge() {
     window.addEventListener('resize', function () { setTimeout(fFixSplit, 0); });
   }
 
+  // Ctrl+K Ctrl+M chord → maximize/restore the editor group. VS Code can't see keys
+  // typed into a focused webview, so reproduce the chord here and relay it to the host.
+  var bCtrlK = false, nCtrlKT = null;
+  document.addEventListener('keydown', function (e) {
+    var sK = (e.key || '').toLowerCase();
+    if (sK === 'control' || sK === 'meta' || sK === 'shift' || sK === 'alt') return;
+    if (bCtrlK) {
+      bCtrlK = false; if (nCtrlKT) { clearTimeout(nCtrlKT); nCtrlKT = null; }
+      if ((e.ctrlKey || e.metaKey) && (sK === 'm' || e.code === 'KeyM')) {
+        e.preventDefault(); e.stopPropagation(); fPost({ type: 'maximizeGroup' });
+      }
+      return;                               // Ctrl+K + anything else: chord aborted
+    }
+    if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && (sK === 'k' || e.code === 'KeyK')) {
+      e.preventDefault(); e.stopPropagation();
+      bCtrlK = true; nCtrlKT = setTimeout(function () { bCtrlK = false; }, 1500);
+    }
+  }, true);
+
   // Ctrl+S / Cmd+S saves via the host (not the browser's "save page"). Commit the
   // focused core first (commit is on blur), then ask the extension to save.
   document.addEventListener('keydown', function (e) {
