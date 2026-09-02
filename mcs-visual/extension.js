@@ -109,6 +109,22 @@ function fActivate(context) {
       else await vscode.commands.executeCommand('mcsv.open', vscode.Uri.file(sPath));
     })
   );
+  // Source -> Visual: when the active source tab becomes a different editable page
+  // (e.g. closing a tab shifts focus to another Mcs/Hitp tab, or clicking one), the
+  // open visual editor navigates to it — keeping the two panes mirrored. The reverse
+  // (visual -> source) is already done by fOnNavigate's showTextDocument.
+  context.subscriptions.push(
+    vscode.window.onDidChangeActiveTextEditor((oEd) => {
+      if (!oEd || oEd.document.uri.scheme !== 'file') return;   // focus moved into the visual (not a text editor)
+      if (!fNavigateVisual) return;                             // no visual editor open
+      const sFs = oEd.document.uri.fsPath;
+      if (!/^(Mcs|Hitp).*\.last\.html$/i.test(path.basename(sFs))) return; // only editable pages
+      const fNorm = (s) => (s || '').replace(/\\/g, '/').toLowerCase();
+      if (fNorm(sFs) === fNorm(sVisualFile)) return;            // visual already shows it -> no loop
+      const sUrl = fDisplayUrlForPath(sFs);
+      if (sUrl) fNavigateVisual(sUrl);                          // visual follows the focused source tab
+    })
+  );
   // Canonicalise on EVERY save (File → Save, Ctrl+S, or programmatic) of a doc
   // that has a Mcsh-Visual editor open.
   context.subscriptions.push(
@@ -540,7 +556,7 @@ function fBuildShell(webview, url) {
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'nonce-${sNonce}';">
 <style>body{font:13px system-ui;padding:20px;color:#ddd;background:#1e1e1e}code{background:#333;padding:1px 5px;border-radius:3px}button{margin-top:8px}</style>
 </head><body>
-<h3>Mcsh-Visual</h3>
+<h3>Mcs-Visual</h3>
 <p>This file isn't under your server document-root, so the live view can't load.</p>
 <p>Expected the path to contain <code>/htdocs/</code> (configurable via <code>mcsv.docRootFolder</code> / <code>mcsv.serverOrigin</code>).</p>
 <button id="idRaw">Open the raw text editor</button>
@@ -588,8 +604,8 @@ function fBuildShell(webview, url) {
     <div id="idMenu">
       <div class="clsItem clsHasSub">File<span class="clsCaret">&#9656;</span>
         <div class="clsSubmenu">
-          <div class="clsItem" data-cmd="cmdSave">Save<span class="clsKbd">Ctrl+S</span></div>
           <div class="clsItem" data-cmd="cmdOpen" data-kind="mcs" style="display:none">Open<span class="clsKbd">Ctrl+Alt+P O</span></div>
+          <div class="clsItem" data-cmd="cmdSave">Save<span class="clsKbd">Ctrl+S</span></div>
           <div class="clsItem" data-cmd="cmdOpenRaw">Open in source</div>
         </div>
       </div>

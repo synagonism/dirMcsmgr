@@ -16,8 +16,7 @@
     "onStartupFinished",
     "onCommand:mcsv.currentFile",
     "onCommand:mcsv.currentFileDirname",
-    "onCommand:mcsv.currentFileBasename",
-    "onCommand:mcsv.openByCode"
+    "onCommand:mcsv.currentFileBasename"
   ],
   "main": "./extension.js",
   "contributes": {
