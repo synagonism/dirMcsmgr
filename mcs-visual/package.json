@@ -1,9 +1,9 @@
 {
-  "name": "mcsh-visual",
-  "displayName": "Mcsh-Visual",
+  "name": "mcs-visual",
+  "displayName": "Mcs-Visual",
   "description": "Visual-editor for dirMcsh Mcs*/Hitp*.last.html files. Renders the live local-server page, lets you edit the whole page, and on Save re-serializes the WHOLE document to the canonical 2/4-space Mcsh format.",
-  "version": "0.2.0",
-  "date": "2026-08-29",
+  "version": "0.3.0",
+  "date": "2026-09-03",
   "publisher": "synagonism",
   "private": true,
   "engines": {
@@ -16,7 +16,8 @@
     "onStartupFinished",
     "onCommand:mcsv.currentFile",
     "onCommand:mcsv.currentFileDirname",
-    "onCommand:mcsv.currentFileBasename"
+    "onCommand:mcsv.currentFileBasename",
+    "onCommand:mcsv.openByCode"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -38,9 +39,14 @@
     "commands": [
       {
         "command": "mcsv.open",
-        "title": "Open in Mcsh-Visual",
+        "title": "Open in Mcs-Visual",
         "category": "Mcsh",
         "icon": "media/icon.png"
+      },
+      {
+        "command": "mcsv.openByCode",
+        "title": "Open McsHitp file by code",
+        "category": "Mcsh"
       }
     ],
     "menus": {
@@ -53,7 +59,7 @@
       ]
     },
     "configuration": {
-      "title": "Mcsh-Visual",
+      "title": "Mcs-Visual",
       "properties": {
         "mcsv.serverOrigin": {
           "type": "string",

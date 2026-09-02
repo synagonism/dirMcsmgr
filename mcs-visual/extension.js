@@ -32,6 +32,8 @@ const oSetUriSaving = new Set();
 let oShortcutsCache = { path: '', mtimeMs: -1, list: [] };
 /** fsPath of the file currently shown in the active Mcsh-Visual editor (for ${command:mcsv.currentFile}). */
 let sVisualFile = '';
+/** Navigate fn of the most-recently-active open Mcsh-Visual editor (null = none open). */
+let fNavigateVisual = null;
 
 function fActivate(context) {
   const oProvider = fCreateProvider(context);
@@ -78,6 +80,35 @@ function fActivate(context) {
     vscode.commands.registerCommand('mcsv.currentFileDirname', () => { const s = fTaskFile(); return s ? path.dirname(s) : ''; }),
     vscode.commands.registerCommand('mcsv.currentFileBasename', () => { const s = fTaskFile(); return s ? path.basename(s) : ''; })
   );
+  // Open a McsHitp page BY CODE: prompt a Mcs-code prefilled with the current file's
+  // code, resolve it to dir<Cat>/<code>.last.html (Hitp → dir<Cat>/dirHitp/…) and open
+  // it in Mcsh-Visual (source + visual). Works from the visual editor and from a raw
+  // .last.html text editor (bound to Ctrl+Alt+P O in the user's keybindings).
+  context.subscriptions.push(
+    vscode.commands.registerCommand('mcsv.openByCode', async () => {
+      const oEd = vscode.window.activeTextEditor;
+      const sCur = (oEd && oEd.document.uri.scheme === 'file' && /\.last\.html$/i.test(oEd.document.uri.fsPath))
+        ? oEd.document.uri.fsPath : sVisualFile;
+      if (!sCur) { vscode.window.showWarningMessage('Mcsh-Visual: no current McsHitp file.'); return; }
+      const sCurCode = path.basename(sCur).replace(/\.last\.html$/i, '');
+      const sInput = await vscode.window.showInputBox({
+        prompt: 'Open McsHitp file by code',
+        value: sCurCode,
+        valueSelection: [0, sCurCode.length],
+      });
+      if (!sInput) return;
+      const sCode = sInput.trim().replace(/\.last\.html$/i, '');
+      const sRoot = fWorldviewRoot(sCur, sCurCode);
+      let sPath = fPathForCode(sRoot, sCode);
+      if (!sPath || !fs.existsSync(sPath)) sPath = fSearchByCode(sRoot, sCode);
+      if (!sPath || !fs.existsSync(sPath)) { vscode.window.showWarningMessage('Mcsh-Visual: no file for code “' + sCode + '”.'); return; }
+      // A visual editor is open → reuse its single tab: navigate its iframe (the
+      // bridge `nav` retargets the edit doc + source pane). Else open a fresh pair.
+      const sUrl = fNavigateVisual ? fDisplayUrlForPath(sPath) : '';
+      if (fNavigateVisual && sUrl) fNavigateVisual(sUrl);
+      else await vscode.commands.executeCommand('mcsv.open', vscode.Uri.file(sPath));
+    })
+  );
   // Canonicalise on EVERY save (File → Save, Ctrl+S, or programmatic) of a doc
   // that has a Mcsh-Visual editor open.
   context.subscriptions.push(
@@ -116,7 +147,7 @@ function fCreateProvider(context) {
     // page now shown, so edits/saves follow. `null` = a view-only page.
     let oActiveDoc = document;
     sVisualFile = document.uri.fsPath;           // seed ${command:mcsv.currentFile}
-    panel.onDidChangeViewState(() => { if (panel.active && oActiveDoc) sVisualFile = oActiveDoc.uri.fsPath; });
+    panel.onDidChangeViewState(() => { if (panel.active) { if (oActiveDoc) sVisualFile = oActiveDoc.uri.fsPath; fNavigateVisual = fNavigate; } });
     const oSetAddedKeys = new Set();             // docs we added to `oSetUriManaged` (cleanup on dispose)
     const sDocRootBase = fDocRootBase(document);
 
@@ -129,6 +160,16 @@ function fCreateProvider(context) {
     const fSendIds = () => fToChrome({ type: 'ids', ids: oActiveDoc ? omModel.fCollectIds(oActiveDoc.getText()) : [] });
     const fStatus = (m) => fToChrome({ type: 'status', message: m });
     const fReloadFrame = () => fToChrome({ type: 'reload' });
+    // Tell the chrome which file-kind is showing, so it shows/hides kind-tagged
+    // menu items (e.g. File → Open only on Mcs pages).
+    const fSendMenuKind = () => fToChrome({ type: 'menuKind', kind: fFileKind(oActiveDoc) });
+    // Navigate THIS visual editor's iframe to another page (reuse the tab). The
+    // resulting bridge `nav` retargets oActiveDoc + the source pane (fOnNavigate).
+    const fNavigate = (sUrl) => { if (sUrl) fToChrome({ type: 'navigate', url: sUrl }); };
+    fNavigateVisual = fNavigate;                 // this editor is the active one at resolve time
+
+    // File → Open (and the Ctrl+Alt+P O chord): open a McsHitp page by code.
+    const fOpenByCode = () => vscode.commands.executeCommand('mcsv.openByCode');
 
     // --- source <-> visual cursor sync ----------------------------------------
     // Flattened cores, cached per document version so cursor-move sync doesn't
@@ -191,6 +232,7 @@ function fCreateProvider(context) {
           fSendIds();
           fToChrome({ type: 'shortcuts', list: fReadUserShortcuts() }); // auto-sync viewer chords
           fUpdateTitle();                                     // visual tab → navigated file name
+          fSendMenuKind();                                    // menu adapts to Mcs/Hitp
           fStatus('editing ' + oUri.path.split('/').pop());
           return;
         } catch (e) { /* fall through to view-only */ }
@@ -199,6 +241,7 @@ function fCreateProvider(context) {
       bNavDirty = false;
       fToChrome({ type: 'ids', ids: [] });
       fUpdateTitle();
+      fSendMenuKind();                                        // view-only → hide kind-tagged items
       fStatus('view-only');
     };
 
@@ -267,8 +310,9 @@ function fCreateProvider(context) {
         // --- messages from the browser chrome (address bar / ... menu) --------
         if (msg.source === 'mcsv-chrome') {
           switch (msg.type) {
-            case 'ready': fToChrome({ type: 'setUrl', url: fDisplayUrl(document) }); break; // ids come from bridge `nav`
+            case 'ready': fToChrome({ type: 'setUrl', url: fDisplayUrl(document) }); fSendMenuKind(); break; // ids come from bridge `nav`
             case 'save': if (oActiveDoc) await oActiveDoc.save(); break;
+            case 'open': fOpenByCode(); break;
             case 'cmd': fToChrome({ type: 'cmd', cmd: msg.cmd }); break; // relay to bridge
             case 'cmdPalette': vscode.commands.executeCommand('workbench.action.showCommands'); break; // Ctrl+Shift+P
             case 'openRaw': vscode.commands.executeCommand('vscode.openWith', (oActiveDoc || document).uri, 'default'); break;
@@ -280,6 +324,7 @@ function fCreateProvider(context) {
         switch (msg.type) {
           case 'ready': break;                       // ids are sent from `nav` (below)
           case 'save': if (oActiveDoc) await oActiveDoc.save(); break; // Ctrl+S from the iframe
+          case 'open': fOpenByCode(); break;                           // Ctrl+Alt+P O from the iframe
           case 'cmdPalette': vscode.commands.executeCommand('workbench.action.showCommands'); break; // Ctrl+Shift+P from the iframe
           case 'nav': await fOnNavigate(msg.href); break;
           case 'url': fToChrome({ type: 'setUrl', url: msg.href }); break; // hash jump: address bar only
@@ -330,6 +375,7 @@ function fCreateProvider(context) {
     });
 
     panel.onDidDispose(() => {
+      if (fNavigateVisual === fNavigate) fNavigateVisual = null;   // no visual reuse target once closed
       oSetUriManaged.delete(sKey); oSetUriSaving.delete(sKey);
       oSetAddedKeys.forEach((k) => { oSetUriManaged.delete(k); oSetUriSaving.delete(k); }); // files we retargeted to while browsing
       if (oSyncTimer) clearTimeout(oSyncTimer);
@@ -355,6 +401,75 @@ function fRelPath(document) {
 function fOrigin() {
   const oCfg = vscode.workspace.getConfiguration('mcsv');
   return String(oCfg.get('serverOrigin') || 'http://localhost').replace(/\/+$/, '');
+}
+
+// --- open-by-code helpers --------------------------------------------------
+
+/**
+ * Worldview root (the folder that holds the dir<Cat> folders), inferred from the
+ * CURRENT file's path and its code:
+ *   <root>/<code>.last.html                         (root-level Mcs, no category)
+ *   <root>/dir<Cat>/<code>.last.html                (Mcs)
+ *   <root>/dir<Cat>/dirHitp/<code>.last.html         (Hitp)
+ */
+function fWorldviewRoot(sFsPath, sCode) {
+  const sDir = path.dirname(sFsPath);
+  if (/^Hitp/i.test(sCode)) return path.dirname(path.dirname(sDir)); // strip dirHitp + dir<Cat>
+  const sAlpha = sCode.replace(/^Mcs/i, '').match(/^[A-Za-z]+/);      // has a category?
+  return sAlpha ? path.dirname(sDir) : sDir;                          // strip dir<Cat>, else already root
+}
+
+/** Category names = dir<Cat> folders under root, minus the 'dir' prefix, longest first. */
+function fCategories(sRoot) {
+  let a = [];
+  try {
+    a = fs.readdirSync(sRoot, { withFileTypes: true })
+      .filter((d) => d.isDirectory() && /^dir./.test(d.name))
+      .map((d) => d.name.slice(3));
+  } catch (e) { /* unreadable root → empty */ }
+  a.sort((x, y) => y.length - x.length);   // longest match wins (Stnlaw before Stn, TchInf before Tch)
+  return a;
+}
+
+/**
+ * Deterministic path for a code: Mcs → <root>/dir<Cat>/<code>.last.html;
+ * Hitp → <root>/dir<Cat>/dirHitp/<code>.last.html; category-less Mcs → <root>/<code>.last.html.
+ * The category is the longest known dir<Cat> that prefixes the code's letters
+ * (Hitp codes carry extra sub-category letters, e.g. HitpStnEcon → dirStn). null if unknown.
+ */
+function fPathForCode(sRoot, sCode) {
+  const bHitp = /^Hitp/i.test(sCode);
+  const sAlpha = (sCode.replace(/^(Mcs|Hitp)/i, '').match(/^[A-Za-z]+/) || [''])[0];
+  if (!bHitp && !sAlpha) return path.join(sRoot, sCode + '.last.html');   // e.g. Mcs000000
+  const sCat = fCategories(sRoot).find((c) => sAlpha.toLowerCase().indexOf(c.toLowerCase()) === 0);
+  if (!sCat) return null;
+  const sSub = bHitp ? path.join('dir' + sCat, 'dirHitp') : 'dir' + sCat;
+  return path.join(sRoot, sSub, sCode + '.last.html');
+}
+
+/** Fallback: recursively find <code>.last.html under root (skipping *.files asset dirs). */
+function fSearchByCode(sRoot, sCode) {
+  const sTarget = (sCode + '.last.html').toLowerCase();
+  const aStack = [sRoot];
+  while (aStack.length) {
+    const sDir = aStack.pop();
+    let aEnt;
+    try { aEnt = fs.readdirSync(sDir, { withFileTypes: true }); } catch (e) { continue; }
+    for (const oE of aEnt) {
+      if (oE.isDirectory()) { if (!/\.files$/i.test(oE.name)) aStack.push(path.join(sDir, oE.name)); }
+      else if (oE.name.toLowerCase() === sTarget) return path.join(sDir, oE.name);
+    }
+  }
+  return null;
+}
+
+/** File-kind of a document by basename: 'mcs' | 'hitp' | 'none' (view-only). */
+function fFileKind(doc) {
+  if (!doc) return 'none';
+  const sBase = doc.uri.path.split('/').pop() || '';
+  if (/^Mcs/i.test(sBase)) return 'mcs';
+  if (/^Hitp/i.test(sBase)) return 'hitp';
+  return 'none';
 }
 
 /** Absolute fs path of the server document-root (up to and incl. the marker). */
@@ -399,6 +514,18 @@ function fDisplayUrl(document) {
 function fLocalhostUrl(document) {
   const sDisp = fDisplayUrl(document);
   return sDisp ? sDisp + '?mcsv=1' : null;
+}
+
+/** Clean address-bar URL for an arbitrary fs path (like fDisplayUrl, path-based). */
+function fDisplayUrlForPath(sFsPath) {
+  const oCfg = vscode.workspace.getConfiguration('mcsv');
+  const sMarker = String(oCfg.get('docRootFolder') || 'htdocs');
+  const sP = sFsPath.replace(/\\/g, '/');
+  const sNeedle = '/' + sMarker.replace(/^\/+|\/+$/g, '') + '/';
+  const i = sP.toLowerCase().indexOf(sNeedle.toLowerCase());
+  if (i < 0) return '';
+  const sRel = sP.slice(i + sNeedle.length);
+  return `${fOrigin()}/${sRel.split('/').map(encodeURIComponent).join('/')}`;
 }
 
   // --- webview shell: the browser chrome + iframe ----------------------------
@@ -462,6 +589,7 @@ function fBuildShell(webview, url) {
       <div class="clsItem clsHasSub">File<span class="clsCaret">&#9656;</span>
         <div class="clsSubmenu">
           <div class="clsItem" data-cmd="cmdSave">Save<span class="clsKbd">Ctrl+S</span></div>
+          <div class="clsItem" data-cmd="cmdOpen" data-kind="mcs" style="display:none">Open<span class="clsKbd">Ctrl+Alt+P O</span></div>
           <div class="clsItem" data-cmd="cmdOpenRaw">Open in source</div>
         </div>
       </div>
@@ -514,6 +642,13 @@ function fBuildShell(webview, url) {
   const sEditFlag = '?mcsv=1';
 
   function fToChrome(m){ m.source='mcsv-chrome'; vscode.postMessage(m); }
+  // Show items tagged data-kind only for the matching file-kind (mcs/hitp/none);
+  // untagged items always show.
+  function fApplyMenuKind(sKind){
+    document.querySelectorAll('#idMenu [data-kind]').forEach(el => {
+      el.style.display = (el.getAttribute('data-kind') === sKind) ? '' : 'none';
+    });
+  }
   function fShowStatus(m){ oStatusEl.textContent=m||''; oStatusEl.classList.add('clsShow'); if(nStatusT)clearTimeout(nStatusT); nStatusT=setTimeout(()=>oStatusEl.classList.remove('clsShow'),2600); }
   function fLoadUrl(u){ if(!u)return; if(!/[?&]mcsv=/.test(u)) u += (u.indexOf('?')<0?'?':'&')+'mcsv=1'; f.src=u; }
 
@@ -549,6 +684,7 @@ function fBuildShell(webview, url) {
     const sCmd = oItem.getAttribute('data-cmd');
     oMenu.classList.remove('clsOpen');
     if(sCmd==='cmdSave') fToChrome({type:'save'});
+    else if(sCmd==='cmdOpen') fToChrome({type:'open'});
     else if(sCmd==='cmdOpenRaw') fToChrome({type:'openRaw'});
     else fToChrome({type:'cmd', cmd: sCmd});      // cmdBold / cmdRed / cmdGreen / cmdUrl -> bridge
   });
@@ -568,6 +704,8 @@ function fBuildShell(webview, url) {
       // bridge is always present here (we only reload after editing a loaded page).
       if (d.type === 'reload') { fToFrame('reloadPage', {keepPlace:true}); return; }  // post-save/structural → keep edit line
       if (d.type === 'setUrl') { url.value = d.url || ''; return; }
+      if (d.type === 'navigate') { fLoadUrl(d.url); return; }   // reuse this tab: load another page
+      if (d.type === 'menuKind') { fApplyMenuKind(d.kind); return; }
       if (d.type === 'status') { fShowStatus(d.message); return; }
       try { f.contentWindow.postMessage(d, '*'); } catch(_){}
     }

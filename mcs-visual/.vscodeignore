@@ -1,0 +1,6 @@
+.vscode/**
+.gitignore
+**/*.vsix
+cmd.*.bat
+src/test-*.js
+node_modules/@types/**

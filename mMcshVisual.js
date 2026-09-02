@@ -268,6 +268,10 @@ export function fInitMcsv_bridge() {
   // drops its (date-expanded) text verbatim at the caret. `oChordCmds` is
   // reassigned wholesale whenever the extension pushes a fresh parsed list.
   var oChordCmds = {};
+  // Chords that relay a command to the host (extension) instead of editing text.
+  // The iframe swallows VS Code keybindings, so these are reproduced here and
+  // posted up; not derivable from keybindings.json (non-type/insertSnippet cmds).
+  var oHostChords = { 'ctrl+alt+p o': 'open' };   // Open current page in local server
   function fSetChords(aList) {
     var o = {};
     (aList || []).forEach(function (oE) {
@@ -331,6 +335,7 @@ export function fInitMcsv_bridge() {
   function fChordArm() { if (nChordTimer) clearTimeout(nChordTimer); nChordTimer = setTimeout(fChordReset, 1500); }
   function fChordIsPrefix(sBuf) {
     for (var k in oChordCmds) { if (k.indexOf(sBuf + ' ') === 0) return true; }
+    for (var h in oHostChords) { if (h.indexOf(sBuf + ' ') === 0) return true; }
     return false;
   }
   document.addEventListener('keydown', function (e) {
@@ -346,14 +351,16 @@ export function fInitMcsv_bridge() {
       sTok = 'ctrl+alt+' + sKey;
     }
 
-    var bExact = Object.prototype.hasOwnProperty.call(oChordCmds, sTok);
+    var bHost = Object.prototype.hasOwnProperty.call(oHostChords, sTok);
+    var bExact = bHost || Object.prototype.hasOwnProperty.call(oChordCmds, sTok);
     var bPrefix = fChordIsPrefix(sTok);
     if (!bExact && !bPrefix) { if (sChordBuf) { e.preventDefault(); fChordReset(); } return; }
 
     e.preventDefault(); e.stopPropagation();
     if (bExact) {
-      var fCmd = oChordCmds[sTok];
       fChordReset();
+      if (bHost) { fPost({ type: oHostChords[sTok] }); return; }   // relay to the host (extension)
+      var fCmd = oChordCmds[sTok];
       try { fCmd(); } catch (err) { fPost({ type: 'bridgeError', message: String(err && err.message || err) }); }
     } else {
       sChordBuf = sTok; fChordArm();
