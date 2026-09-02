@@ -2647,7 +2647,7 @@ document.getElementById('idCnrMainContentDiv').focus()
 // embedded in the editor (URL flag ?mcsv=1). Never runs on the public site.
 try {
   if (new URLSearchParams(location.search).has('mcsv') || sessionStorage.getItem('mcsvEdit')) {
-    import('./mMcshVisual.js?v=' + Date.now())
+    import('./mcs-visual/src/mMcsVisual.js?v=' + Date.now())
       .then(function (m) { (m.fInitMcsv_bridge || m.default)() })   // module now exports an init; call it
       .catch(function (e) { console.error('mcsv bridge load failed:', e) })
   }

@@ -23,8 +23,8 @@
   "contributes": {
     "customEditors": [
       {
-        "viewType": "mcsv.visualEditor",
-        "displayName": "Mcsh-Visual",
+        "viewType": "mcsv.editorVisual",
+        "displayName": "Mcs-Visual",
         "selector": [
           {
             "filenamePattern": "Mcs*.last.html"
@@ -40,13 +40,13 @@
       {
         "command": "mcsv.open",
         "title": "Open in Mcs-Visual",
-        "category": "Mcsh",
+        "category": "Mcs",
         "icon": "media/icon.png"
       },
       {
         "command": "mcsv.openByCode",
         "title": "Open McsHitp file by code",
-        "category": "Mcsh"
+        "category": "Mcs"
       }
     ],
     "menus": {

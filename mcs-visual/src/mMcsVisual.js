@@ -1,9 +1,9 @@
-// mMcshVisual.js — edit-bridge for the Mcsh-Visual VS Code extension.
+// mcs-visual/src/mMcsVisual.js — edit-bridge for the Mcs-Visual VS Code extension.
 //
 // Runs INSIDE the normal, server-rendered page (so it looks exactly like the
-// live site). Loaded by mMcsh2.js ONLY when the URL carries `?mcsv=1`, i.e. when
-// the page is embedded in the Mcsh-Visual editor's iframe. On the public site it
-// never loads and has zero effect.
+// live site). Served over http and loaded by mMcsh2.js ONLY when the URL carries
+// `?mcsv=1`, i.e. when the page is embedded in the Mcs-Visual editor's iframe. On
+// the public site it never loads and has zero effect.
 //
 // Unlike mMcshEdit.js (the surgical WYSIWYG bridge), this one is paired with an
 // extension that keeps every change in an UNSAVED document and re-serialises the
@@ -421,7 +421,7 @@ export function fInitMcsv_bridge() {
 
   // --- keep ToC/content split correct for the frame width (from mMcshEdit) ----
   var oMcshMod = null;
-  import('./mMcsh2.js').then(function (m) { oMcshMod = m; fFixSplit(); }).catch(function () {});
+  import('../../mMcsh2.js').then(function (m) { oMcshMod = m; fFixSplit(); }).catch(function () {});
   function fFixSplit() {
     var oMain = document.getElementById('idCnrMainDiv');
     var oInfo = document.getElementById('idCnrMainInfoDiv');

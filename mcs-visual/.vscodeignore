@@ -3,4 +3,5 @@
 **/*.vsix
 cmd.*.bat
 src/test-*.js
+src/mMcsVisual.js
 node_modules/@types/**

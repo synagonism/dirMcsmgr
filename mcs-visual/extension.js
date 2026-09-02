@@ -6,7 +6,7 @@
  * with back / forward / reload and a "..." overflow menu (File → Save; Format →
  * Bold, Color, Url), hosting an <iframe> that renders the page from the LOCAL
  * SERVER (so it looks exactly like the live site). A bridge served with the page
- * (Mcsmgr/mMcshVisual.js, loaded only when the URL carries ?mcsv=1) makes the
+ * (Mcsmgr/mcs-visual/src/mMcsVisual.js, loaded only when the URL carries ?mcsv=1) makes the
  * whole page editable and reports each change as (id, ordinal, text/markup).
  *
  * Editing model ("full", not surgical): every reported change is mirrored into
@@ -23,7 +23,7 @@ const omModel = require('./src/mModel');
 const omFormat = require('./src/mFormat');
 const fFormat = omFormat.fFormat;
 
-const sViewType = 'mcsv.visualEditor';
+const sViewType = 'mcsv.editorVisual';
 /** Uris that currently have a Mcsh-Visual editor open (so we reformat on save). */
 const oSetUriManaged = new Set();
 /** Uris mid-save: the canonical-format edit is ours, so don't treat it as external. */
