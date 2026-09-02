@@ -25,7 +25,9 @@ if (process.argv[2]) {
   process.exit()
 }
 
-function fSftp () {
+function fSftp (sPassword) {
+  // callers that repurpose argv[2] (e.g. mMcsNew) pass the password here instead
+  if (sPassword) oSftp.password = sPassword
   var aFil = JSON.parse(moFs.readFileSync('dirManager/sftp.json'))
   console.log(aFil)
   // worldview-agnostic: local root = the worldview folder we run in (cwd); remote = httpdocs/<worldview>/
@@ -37,16 +39,21 @@ function fSftp () {
       let sftp = new mfClient();
       console.log(sFileIn);
       sftp.on('keyboard-interactive', (name, instructions, instructionsLang, prompts, finish) => { finish([oConfigIn.password]); });
-      sftp.connect(oConfigIn).then(() => {
-        // SPECIFIC INFO
-        return sftp.put(sLocalRoot + sFileIn,
-          "/var/www/vhosts/synagonism.net/httpdocs/" + sWorldview + "/" + sFileIn);
+      // SPECIFIC INFO
+      var sRemote = "/var/www/vhosts/synagonism.net/httpdocs/" + sWorldview + "/" + sFileIn;
+      var sRemoteDir = sRemote.substring(0, sRemote.lastIndexOf('/'));
+      sftp.connect(oConfigIn).then(async () => {
+        // put does not create parent dirs; ensure the remote directory exists first
+        if (!(await sftp.exists(sRemoteDir))) await sftp.mkdir(sRemoteDir, true);
+        return sftp.put(sLocalRoot + sFileIn, sRemote);
       }).then(() => {
         console.log('finish '+sFileIn);
         sftp.end();
         resolve(sFileIn);
       }).catch((err) => {
         console.log(err, 'catch error');
+        sftp.end();
+        resolve(sFileIn);
       });
     });
   };
