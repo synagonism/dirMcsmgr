@@ -488,7 +488,18 @@ export function fInitMcsv_bridge() {
   // Clicking anywhere in the page (this iframe) should dismiss the chrome's ...
   // menu. A parent-window `blur` doesn't fire when focus moves into a child
   // iframe, so the chrome can't detect it — tell it from here.
-  document.addEventListener('mousedown', function () { fPost({ type: 'closeMenu' }); }, true);
+  document.addEventListener('mousedown', function (e) {
+    fPost({ type: 'closeMenu' });
+    // Dismiss the preview popup on an outside click (but not when clicking a preview
+    // link or inside the popup — nested preview links keep working).
+    var t = e.target, oPv = oMcshMod && oMcshMod.oEltCnrPreviewDiv;
+    var bInLink = t && t.closest && t.closest('a.clsPreview');
+    var bInPv = oPv && t && oPv.contains && oPv.contains(t);
+    if (!bInLink && !bInPv && oPv && oPv.style.display !== 'none') {
+      oPv.style.display = 'none';
+      if (oPrevA) { oPrevA.__mcsvPrev = false; oPrevA = null; }
+    }
+  }, true);
 
   // Navigation: let link-icons take you to other local pages (carrying ?mcsv=1
   // so the bridge follows), while leaving in-page #hash links to mMcsh2. External
@@ -499,9 +510,54 @@ export function fInitMcsv_bridge() {
     if (!/[?&]mcsv=/.test(absHref)) absHref += (absHref.indexOf('?') < 0 ? '?' : '&') + 'mcsv=1';
     return absHref + sHash;
   }
+  // --- cyan preview-links: behave like the public site (mMcsh2 fEvtPreview) ----
+  // tap/click → preview (1st = popup, 2nd on the same link = navigate); Alt+click
+  // or long-press → edit the link text inline. Applies in content AND in search
+  // results (both are <a class="clsPreview">).
+  var oPrevA = null;
+  function fHidePreview() { try { if (oMcshMod && oMcshMod.oEltCnrPreviewDiv) oMcshMod.oEltCnrPreviewDiv.style.display = 'none'; } catch (e) {} }
+  function fNavigateLink(a) {
+    var sHref = a.getAttribute('href') || '';
+    if (a.origin && a.origin !== location.origin) { location.assign(a.href); return; }               // external
+    if (/^#/.test(sHref) || a.href.split('#')[0] === location.href.split('#')[0]) { location.hash = a.href.split('#')[1] || ''; return; } // same page
+    location.assign(fWithMcsvFlag(a.href));                                                           // other local page, keep editing
+  }
+  function fPreviewLink(a, nPageX) {
+    if (oPrevA && oPrevA !== a) oPrevA.__mcsvPrev = false;
+    if (a.__mcsvPrev) { a.__mcsvPrev = false; oPrevA = null; fHidePreview(); fNavigateLink(a); return; } // 2nd click → navigate
+    if (!(oMcshMod && oMcshMod.fEvtPreview)) { fNavigateLink(a); return; }                              // module not ready → navigate
+    oPrevA = a; a.__mcsvPrev = true;
+    var sMode = a.closest('#idCnrMainContentDiv') ? 'sContent' : '';                                    // popup sizing like the site
+    oMcshMod.fEvtPreview({ target: a, pageX: nPageX || 0, preventDefault: function () {}, stopPropagation: function () {} }, sMode);
+  }
+
+  // Long-press (touch or mouse) marks the upcoming click as an edit, not a preview.
+  var bLongPress = false, nLpTimer = null;
+  document.addEventListener('pointerdown', function (e) {
+    bLongPress = false; if (nLpTimer) { clearTimeout(nLpTimer); nLpTimer = null; }
+    var a = e.target && e.target.closest ? e.target.closest('a.clsPreview') : null;
+    if (!a) return;
+    nLpTimer = setTimeout(function () {
+      bLongPress = true;                                    // next click edits instead of previewing
+      var oSpan = e.target.closest && e.target.closest('.clsMcsvT');
+      if (oSpan) { try { oSpan.focus(); } catch (x) {} }
+    }, 500);
+  }, true);
+  var fLpCancel = function () { if (nLpTimer) { clearTimeout(nLpTimer); nLpTimer = null; } };
+  document.addEventListener('pointerup', fLpCancel, true);
+  document.addEventListener('pointermove', fLpCancel, true);
+  document.addEventListener('pointercancel', fLpCancel, true);
+
   document.addEventListener('click', function (e) {
     var a = e.target && e.target.closest ? e.target.closest('a') : null;
     if (!a) return;
+    // Cyan preview-links: preview (or edit on Alt+click / long-press).
+    if (a.classList && a.classList.contains('clsPreview')) {
+      if (e.altKey || bLongPress) { bLongPress = false; e.preventDefault(); return; } // edit: keep caret, block nav
+      e.preventDefault(); e.stopPropagation();
+      fPreviewLink(a, e.pageX);
+      return;
+    }
     var sHref = a.getAttribute('href');
     if (!sHref) { e.preventDefault(); return; }             // js/empty anchors: no-op
     var sAbs = a.href;                                       // resolved absolute URL
