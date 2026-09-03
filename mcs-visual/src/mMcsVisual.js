@@ -271,7 +271,7 @@ export function fInitMcsv_bridge() {
   // Chords that relay a command to the host (extension) instead of editing text.
   // The iframe swallows VS Code keybindings, so these are reproduced here and
   // posted up; not derivable from keybindings.json (non-type/insertSnippet cmds).
-  var oHostChords = { 'ctrl+alt+p o': 'open' };   // Open current page in local server
+  var oHostChords = { 'ctrl+alt+p o': 'open', 'ctrl+alt+p x u': 'indexUpload' };   // relayed to the host
   function fSetChords(aList) {
     var o = {};
     (aList || []).forEach(function (oE) {

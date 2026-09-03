@@ -186,6 +186,9 @@ function fCreateProvider(context) {
 
     // File → Open (and the Ctrl+Alt+P O chord): open a McsHitp page by code.
     const fOpenByCode = () => vscode.commands.executeCommand('mcsv.openByCode');
+    // File → Index and upload (and Ctrl+Alt+P X U): run the workspace task that
+    // name-indexes the current file and uploads the changed files.
+    const fIndexUpload = () => vscode.commands.executeCommand('workbench.action.tasks.runTask', 'Index names of current-file and upload');
 
     // --- source <-> visual cursor sync ----------------------------------------
     // Flattened cores, cached per document version so cursor-move sync doesn't
@@ -329,6 +332,7 @@ function fCreateProvider(context) {
             case 'ready': fToChrome({ type: 'setUrl', url: fDisplayUrl(document) }); fSendMenuKind(); break; // ids come from bridge `nav`
             case 'save': if (oActiveDoc) await oActiveDoc.save(); break;
             case 'open': fOpenByCode(); break;
+            case 'indexUpload': fIndexUpload(); break;
             case 'cmd': fToChrome({ type: 'cmd', cmd: msg.cmd }); break; // relay to bridge
             case 'cmdPalette': vscode.commands.executeCommand('workbench.action.showCommands'); break; // Ctrl+Shift+P
             case 'openRaw': vscode.commands.executeCommand('vscode.openWith', (oActiveDoc || document).uri, 'default'); break;
@@ -341,6 +345,7 @@ function fCreateProvider(context) {
           case 'ready': break;                       // ids are sent from `nav` (below)
           case 'save': if (oActiveDoc) await oActiveDoc.save(); break; // Ctrl+S from the iframe
           case 'open': fOpenByCode(); break;                           // Ctrl+Alt+P O from the iframe
+          case 'indexUpload': fIndexUpload(); break;                   // Ctrl+Alt+P X U from the iframe
           case 'maximizeGroup': vscode.commands.executeCommand('workbench.action.toggleMaximizeEditorGroup'); break; // Ctrl+K Ctrl+M
           case 'cmdPalette': vscode.commands.executeCommand('workbench.action.showCommands'); break; // Ctrl+Shift+P from the iframe
           case 'nav': await fOnNavigate(msg.href); break;
@@ -605,9 +610,10 @@ function fBuildShell(webview, url) {
     <div id="idMenu">
       <div class="clsItem clsHasSub">File<span class="clsCaret">&#9656;</span>
         <div class="clsSubmenu">
-          <div class="clsItem" data-cmd="cmdOpen" data-kind="mcs" style="display:none">Open<span class="clsKbd">Ctrl+Alt+P O</span></div>
+          <div class="clsItem" title="Open file by name" data-cmd="cmdOpen" data-kind="mcs" style="display:none">Open<span class="clsKbd">Ctrl+Alt+P O</span></div>
           <div class="clsItem" data-cmd="cmdSave">Save<span class="clsKbd">Ctrl+S</span></div>
           <div class="clsItem" data-cmd="cmdOpenRaw">Open in source</div>
+          <div class="clsItem" title="Index names of current file and upload" data-cmd="cmdIndexUpload" data-kind="edit" style="display:none">Index and upload<span class="clsKbd">Ctrl+Alt+P X U</span></div>
         </div>
       </div>
       <div class="clsItem clsHasSub">Edit<span class="clsCaret">&#9656;</span>
@@ -663,7 +669,9 @@ function fBuildShell(webview, url) {
   // untagged items always show.
   function fApplyMenuKind(sKind){
     document.querySelectorAll('#idMenu [data-kind]').forEach(el => {
-      el.style.display = (el.getAttribute('data-kind') === sKind) ? '' : 'none';
+      var k = el.getAttribute('data-kind');
+      var bShow = (k === sKind) || (k === 'edit' && (sKind === 'mcs' || sKind === 'hitp'));
+      el.style.display = bShow ? '' : 'none';
     });
   }
   function fShowStatus(m){ oStatusEl.textContent=m||''; oStatusEl.classList.add('clsShow'); if(nStatusT)clearTimeout(nStatusT); nStatusT=setTimeout(()=>oStatusEl.classList.remove('clsShow'),2600); }
@@ -702,6 +710,7 @@ function fBuildShell(webview, url) {
     oMenu.classList.remove('clsOpen');
     if(sCmd==='cmdSave') fToChrome({type:'save'});
     else if(sCmd==='cmdOpen') fToChrome({type:'open'});
+    else if(sCmd==='cmdIndexUpload') fToChrome({type:'indexUpload'});
     else if(sCmd==='cmdOpenRaw') fToChrome({type:'openRaw'});
     else fToChrome({type:'cmd', cmd: sCmd});      // cmdBold / cmdRed / cmdGreen / cmdUrl -> bridge
   });
