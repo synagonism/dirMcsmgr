@@ -3,6 +3,12 @@
 // ctrl+k ctrl+2 folds them and shows shortcuts
 [
 
+// k m:: maximize/restore editor group (also relayed from the Mcs-Visual pane)
+{
+  "key": "ctrl+k ctrl+m",
+  "command": "workbench.action.toggleMaximizeEditorGroup"
+},
+
 // SYMBOLS
 // =:: selected-number increase
 {
@@ -291,19 +297,12 @@
 },
 
 // HITP
-// p n a:: hitP Break
+
+// p b o:: hitP Browser Open current .last.html in local server (integrated browser, zero-click)
 {
-  "key": "ctrl+alt+p b", 
-  "command": "runCommands",
-  "args": {
-    "commands": [
-      "cursorUp",
-      "cursorLineEnd",
-      "editor.action.insertLineAfter",
-      {"command": "type", "args": {"text": "<br>"}},
-    ]
-  },
-  "when": "editorTextFocus"
+  "key": "ctrl+alt+p b o",
+  "command": "mcs.openInLocalServer",
+  "when": "resourceFilename =~ /\\.last\\.html$/"
 },
 // HITP COLOR
 // p c b:: hitP Color Blue
@@ -880,11 +879,10 @@
   "when": "editorTextFocus"
 },
 
-// p o:: hitP Open current .last.html in local server (integrated browser, zero-click)
+// p o:: hitP Open McsHitp file by code (prompts a Mcs-code prefilled with the current file, opens dir<Cat>/<code>.last.html)
 {
   "key": "ctrl+alt+p o",
-  "command": "mcs.openInLocalServer",
-  "when": "resourceFilename =~ /\\.last\\.html$/"
+  "command": "mcsv.openByCode"
 },
 
 // hitP Paragraph
@@ -1398,6 +1396,22 @@
 },
 // p v 3:: hitP saVe patch versioning
 
+// p x u:: hitP indeX names of current-file and Upload
+{
+  "key": "ctrl+alt+p x u",
+  "command": "workbench.action.tasks.runTask",
+  "args": "Index names of current-file and upload",
+  "when": "resourceFilename =~ /\\.last\\.html$/"
+},
+// p x o:: hitP indeX names Only of current-file (no upload)
+{
+  "key": "ctrl+alt+p x o",
+  "command": "workbench.action.tasks.runTask",
+  "args": "Index names ONLY of current-file",
+  "when": "resourceFilename =~ /\\.last\\.html$/"
+},
+
+// =================================
 // ctrl+alt+t:: user input EXTENSION
 
 // CUSTOM VSCODE SHORTCUTS
