@@ -191,6 +191,8 @@ function fCreateProvider(context) {
     const fIndexUpload = () => vscode.commands.executeCommand('workbench.action.tasks.runTask', 'Index names of current-file and upload');
     // File → Index only (and Ctrl+Alt+P X O): name-index the current file, no upload.
     const fIndexOnly = () => vscode.commands.executeCommand('workbench.action.tasks.runTask', 'Index names ONLY of current-file');
+    // File → New McsHitp (and Ctrl+Alt+P K M): run the task that creates a new page.
+    const fNewFile = () => vscode.commands.executeCommand('workbench.action.tasks.runTask', 'Create new McsHitp file');
 
     // --- source <-> visual cursor sync ----------------------------------------
     // Flattened cores, cached per document version so cursor-move sync doesn't
@@ -336,6 +338,7 @@ function fCreateProvider(context) {
             case 'open': fOpenByCode(); break;
             case 'indexUpload': fIndexUpload(); break;
             case 'indexOnly': fIndexOnly(); break;
+            case 'newFile': fNewFile(); break;
             case 'cmd': fToChrome({ type: 'cmd', cmd: msg.cmd }); break; // relay to bridge
             case 'cmdPalette': vscode.commands.executeCommand('workbench.action.showCommands'); break; // Ctrl+Shift+P
             case 'openRaw': vscode.commands.executeCommand('vscode.openWith', (oActiveDoc || document).uri, 'default'); break;
@@ -350,6 +353,7 @@ function fCreateProvider(context) {
           case 'open': fOpenByCode(); break;                           // Ctrl+Alt+P O from the iframe
           case 'indexUpload': fIndexUpload(); break;                   // Ctrl+Alt+P X U from the iframe
           case 'indexOnly': fIndexOnly(); break;                       // Ctrl+Alt+P X O from the iframe
+          case 'newFile': fNewFile(); break;                           // Ctrl+Alt+P K M from the iframe
           case 'maximizeGroup': vscode.commands.executeCommand('workbench.action.toggleMaximizeEditorGroup'); break; // Ctrl+K Ctrl+M
           case 'cmdPalette': vscode.commands.executeCommand('workbench.action.showCommands'); break; // Ctrl+Shift+P from the iframe
           case 'nav': await fOnNavigate(msg.href); break;
@@ -614,6 +618,7 @@ function fBuildShell(webview, url) {
     <div id="idMenu">
       <div class="clsItem clsHasSub">File<span class="clsCaret">&#9656;</span>
         <div class="clsSubmenu">
+          <div class="clsItem" title="Create new McsHitp file" data-cmd="cmdNewFile">New McsHitp<span class="clsKbd">Ctrl+Alt+P K M</span></div>
           <div class="clsItem" title="Open file by name" data-cmd="cmdOpen" data-kind="mcs" style="display:none">Open<span class="clsKbd">Ctrl+Alt+P O</span></div>
           <div class="clsItem" data-cmd="cmdSave">Save<span class="clsKbd">Ctrl+S</span></div>
           <div class="clsItem" data-cmd="cmdOpenRaw">Open in source</div>
@@ -715,6 +720,7 @@ function fBuildShell(webview, url) {
     oMenu.classList.remove('clsOpen');
     if(sCmd==='cmdSave') fToChrome({type:'save'});
     else if(sCmd==='cmdOpen') fToChrome({type:'open'});
+    else if(sCmd==='cmdNewFile') fToChrome({type:'newFile'});
     else if(sCmd==='cmdIndexUpload') fToChrome({type:'indexUpload'});
     else if(sCmd==='cmdIndexOnly') fToChrome({type:'indexOnly'});
     else if(sCmd==='cmdOpenRaw') fToChrome({type:'openRaw'});
