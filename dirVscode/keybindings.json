@@ -450,6 +450,15 @@
   },
   "when": "editorTextFocus"
 },
+
+// HITP FILE
+// p k m:: hitP (K)create new McsHitp file
+{
+  "key": "ctrl+alt+p k m",
+  "command": "workbench.action.tasks.runTask",
+  "args": "Create new McsHitp file"
+},
+
 // HITP LINK
 // p l i:: hitP Linkpreview Insert
 {
@@ -480,7 +489,7 @@
   "args": {"snippet": "<a class=\"clsPreview\" href=\"#${TM_SELECTED_TEXT}\">${TM_SELECTED_TEXT}</a>"},
   "when": "editorTextFocus && editorHasSelection"
 },
-// HITP NAME
+// p n :: hitP Name
 // p n a:: hitP Name Arab-arabic
 {
   "key": "ctrl+alt+p n a", 
@@ -498,7 +507,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name Deut-german
+// p n d:: hitP Name Deut-german
 {
   "key": "ctrl+alt+p n d", 
   "command": "runCommands",
@@ -515,7 +524,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name EllA-greekancient
+// p n e a:: hitP Name EllA-greekancient
 {
   "key": "ctrl+alt+p n e a", 
   "command": "runCommands",
@@ -532,7 +541,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name ELln-greek
+// p n e l:: hitP Name ELln-greek
 {
   "key": "ctrl+alt+p n e l", 
   "command": "runCommands",
@@ -549,7 +558,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name ESpo-esperanto
+// p n e s:: hitP Name ESpo-esperanto
 {
   "key": "ctrl+alt+p n e s", 
   "command": "runCommands",
@@ -566,7 +575,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name Frac-frence
+// p n f:: hitP Name Frac-frence
 {
   "key": "ctrl+alt+p n f", 
   "command": "runCommands",
@@ -583,7 +592,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name Hindi
+// p n h:: hitP Name Hindi
 {
   "key": "ctrl+alt+p n h", 
   "command": "runCommands",
@@ -600,7 +609,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name Italian
+// p n i:: hitP Name Italian
 {
   "key": "ctrl+alt+p n i", 
   "command": "runCommands",
@@ -617,7 +626,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name Japanese
+// p n j:: hitP Name Japanese
 {
   "key": "ctrl+alt+p n j", 
   "command": "runCommands",
@@ -634,7 +643,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name KHmer
+// p n k h:: hitP Name KHmer
 {
   "key": "ctrl+alt+p n k h", 
   "command": "runCommands",
@@ -651,7 +660,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name KoRean
+// p n k r:: hitP Name KoRean
 {
   "key": "ctrl+alt+p n k r", 
   "command": "runCommands",
@@ -668,7 +677,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name Romanean
+// p n r:: hitP Name Romanean
 {
   "key": "ctrl+alt+p n r", 
   "command": "runCommands",
@@ -685,7 +694,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name SiNagu
+// p n s n:: hitP Name SiNagu
 {
   "key": "ctrl+alt+p n s n", 
   "command": "runCommands",
@@ -702,7 +711,7 @@
   },
   "when": "editorTextFocus"
 },
-// Bosnian-Croatian-Montenegrin-Serbian
+// p n s b:: Hitp Name Slavo Bosnian-Croatian-Montenegrin-Serbian
 {
   "key": "ctrl+alt+p n s b", 
   "command": "runCommands",
@@ -725,7 +734,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name SlavoBuLgarian
+// p n s:: hitP Name SlavoBuLgarian
 {
   "key": "ctrl+alt+p n s l", 
   "command": "runCommands",
@@ -742,7 +751,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name SlavoMacedonian
+// p n s:: hitP Name SlavoMacedonian
 {
   "key": "ctrl+alt+p n s m", 
   "command": "runCommands",
@@ -759,7 +768,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name SQip-albanian
+// p n s:: hitP Name SQip-albanian
 {
   "key": "ctrl+alt+p n s q", 
   "command": "runCommands",
@@ -776,7 +785,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name SlavoRussian
+// p n s:: hitP Name SlavoRussian
 {
   "key": "ctrl+alt+p n s r", 
   "command": "runCommands",
@@ -793,7 +802,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name SlavoSlovenian
+// p n s:: hitP Name SlavoSlovenian
 {
   "key": "ctrl+alt+p n s s", 
   "command": "runCommands",
@@ -810,7 +819,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name SPan-spanish
+// p n s:: hitP Name SPan-spanish
 {
   "key": "ctrl+alt+p n s p", 
   "command": "runCommands",
@@ -827,7 +836,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name Turkish
+// p n :: hitP Name Turkish
 {
   "key": "ctrl+alt+p n t", 
   "command": "runCommands",
@@ -844,7 +853,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name Vietnamese
+// p n :: hitP Name Vietnamese
 {
   "key": "ctrl+alt+p n v", 
   "command": "runCommands",
@@ -861,7 +870,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Name Zhon-chinese
+// p n :: hitP Name Zhon-chinese
 {
   "key": "ctrl+alt+p n z", 
   "command": "runCommands",
@@ -885,8 +894,8 @@
   "command": "mcsv.openByCode"
 },
 
-// hitP Paragraph
-// hitP Paragraph Address
+// p p :: hitP Paragraph
+// p p :: hitP Paragraph Address
 {
   "key": "ctrl+alt+p p a", 
   "command": "runCommands",
@@ -933,7 +942,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Paragraph Description
+// p p :: hitP Paragraph Description
 {
   "key": "ctrl+alt+p p d", 
   "command": "runCommands",
@@ -980,7 +989,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Paragraph Generic
+// p p :: hitP Paragraph Generic
 {
   "key": "ctrl+alt+p p g", 
   "command": "runCommands",
@@ -1027,7 +1036,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Paragraph Name
+// p p :: hitP Paragraph Name
 {
   "key": "ctrl+alt+p p n", 
   "command": "runCommands",
@@ -1070,7 +1079,7 @@
   },
   "when": "editorTextFocus"
 },
-// hitP Paragraph (P)description and name
+// p p :: hitP Paragraph (P)description and name
 {
   "key": "ctrl+alt+p p p", 
   "command": "runCommands",
@@ -1146,8 +1155,8 @@
   },
   "when": "editorTextFocus"
 },
-// HITP RESOURCE
-// hitP insert Resource Resource
+
+// p r r:: hitP insert Resource Resource
 {
   "key": "ctrl+alt+p r r", 
   "command": "runCommands",
@@ -1165,7 +1174,7 @@
     ]
   }
 },
-// hitP insert Resource hmnSngu
+// p r s:: hitP insert Resource hmnSngu
 {
   "key": "ctrl+alt+p r s", 
   "command": "runCommands",
@@ -1183,8 +1192,8 @@
     ]
   }
 },
-// HITP SYNTAX
-// hitP Syntax Argument-other
+
+// p s :: hitP Syntax Argument-other
 {
   "key": "ctrl+alt+p s a",
   "command": "runCommands",
@@ -1199,105 +1208,105 @@
   },
   "when": "editorTextFocus && editorHasSelection",
 },
-// hitP Syntax Cause
+// p s :: hitP Syntax Cause
 {
   "key": "ctrl+alt+p s c", 
   "command": "editor.action.insertSnippet",
   "args": {"snippet": "_sntxCause:[${TM_SELECTED_TEXT}]"},
   "when": "editorTextFocus && editorHasSelection"
 },
-// hitP Syntax Direction
+// p s :: hitP Syntax Direction
 {
   "key": "ctrl+alt+p s d", 
   "command": "editor.action.insertSnippet",
   "args": {"snippet": "_sntxDirection:[${TM_SELECTED_TEXT}]"},
   "when": "editorTextFocus && editorHasSelection"
 },
-// hitP Syntax Effect
+// p s :: hitP Syntax Effect
 {
   "key": "ctrl+alt+p s e", 
   "command": "editor.action.insertSnippet",
   "args": {"snippet": "_sntxEffect:[${TM_SELECTED_TEXT}]"},
   "when": "editorTextFocus && editorHasSelection"
 },
-// hitP Syntax Frequency
+// p s :: hitP Syntax Frequency
 {
   "key": "ctrl+alt+p s f", 
   "command": "editor.action.insertSnippet",
   "args": {"snippet": "_sntxFreq:[${TM_SELECTED_TEXT}]"},
   "when": "editorTextFocus && editorHasSelection"
 },
-// hitP Syntax Goal
+// p s :: hitP Syntax Goal
 {
   "key": "ctrl+alt+p s g", 
   "command": "editor.action.insertSnippet",
   "args": {"snippet": "_sntxGoal:[${TM_SELECTED_TEXT}]"},
   "when": "editorTextFocus && editorHasSelection"
 },
-// hitP Syntax Manner
+// p s :: hitP Syntax Manner
 {
   "key": "ctrl+alt+p s m", 
   "command": "editor.action.insertSnippet",
   "args": {"snippet": "_sntxManner:[${TM_SELECTED_TEXT}]"},
   "when": "editorTextFocus && editorHasSelection"
 },
-// hitP Syntax subject
+// p s :: hitP Syntax subject
 {
   "key": "ctrl+alt+p s s", 
   "command": "editor.action.insertSnippet",
   "args": {"snippet": "_sntxSubj:[${TM_SELECTED_TEXT}]"},
   "when": "editorTextFocus && editorHasSelection"
 },
-// hitP Syntax K-subject-complement
+// p s :: hitP Syntax K-subject-complement
 {
   "key": "ctrl+alt+p s k", 
   "command": "editor.action.insertSnippet",
   "args": {"snippet": "_sntxSbjc:[${TM_SELECTED_TEXT}]"},
   "when": "editorTextFocus && editorHasSelection"
 },
-// hitP Syntax Time
+// p s :: hitP Syntax Time
 {
   "key": "ctrl+alt+p s t", 
   "command": "editor.action.insertSnippet",
   "args": {"snippet": "_sntxTime:[${TM_SELECTED_TEXT}]"},
   "when": "editorTextFocus && editorHasSelection"
 },
-// hitP Syntax Object
+// p s :: hitP Syntax Object
 {
   "key": "ctrl+alt+p s o", 
   "command": "editor.action.insertSnippet",
   "args": {"snippet": "_sntxObj1:[${TM_SELECTED_TEXT}]"},
   "when": "editorTextFocus && editorHasSelection"
 },
-// hitP Syntax oUtput
+// p s :: hitP Syntax oUtput
 {
   "key": "ctrl+alt+p s u", 
   "command": "editor.action.insertSnippet",
   "args": {"snippet": "_sntxOutput:[${TM_SELECTED_TEXT}]"},
   "when": "editorTextFocus && editorHasSelection"
 },
-// hitP Syntax sPace
+// p s :: hitP Syntax sPace
 {
   "key": "ctrl+alt+p s p", 
   "command": "editor.action.insertSnippet",
   "args": {"snippet": "_sntxSpace:[${TM_SELECTED_TEXT}]"},
   "when": "editorTextFocus && editorHasSelection"
 },
-// hitP Syntax Quantity
+// p s :: hitP Syntax Quantity
 {
   "key": "ctrl+alt+p s q", 
   "command": "editor.action.insertSnippet",
   "args": {"snippet": "_sntxQuant:[${TM_SELECTED_TEXT}]"},
   "when": "editorTextFocus && editorHasSelection"
 },
-// hitP Syntax Verb
+// p s :: hitP Syntax Verb
 {
   "key": "ctrl+alt+p s v", 
   "command": "editor.action.insertSnippet", 
   "args": {"snippet": "_sntxVerb:{${TM_SELECTED_TEXT}}"},
   "when": "editorTextFocus && editorHasSelection"
 },
-// hitP Syntax Language
+// p s l:: hitP Syntax Language
 // p s l e n:: hitP Syntax Language ENgl-english
 {
   "key": "ctrl+alt+p s l e n", 

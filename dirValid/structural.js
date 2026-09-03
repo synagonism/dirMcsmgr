@@ -25,7 +25,6 @@
 
 import path from 'path';
 import fs from 'fs';
-import { title } from 'process';
 
 const
   aVersion = [
@@ -35,13 +34,14 @@ const
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
-function issue(level, code, sFileName, sectionOrNull, message) {
+function issue(level, code, sFileName, sectionOrNull, message, nLine = null) {
   return {
     level,
     code,
     file: sFileName,
     concept: sectionOrNull?.sSectTitle ?? null,
     conceptId: sectionOrNull?.sId ?? null,
+    line: nLine,
     message,
   };
 }
@@ -85,7 +85,13 @@ function buildNameMap(files) {
 
 /** Resolve an href (relative path) to { relFile, anchor } */
 function resolveHref(href, sFileDir, dirPath) {
-  if (/^https?:\/\//.test(href)) return { external: true };
+  // Any absolute URI scheme (http:, https:, mailto:, tel:, data: …) is external.
+  if (/^[a-z][a-z0-9+.-]*:/i.test(href)) return { external: true };
+  // Root-relative ("/x") and protocol-relative ("//host/x") hrefs are resolved by
+  // the browser against the web server document root, which the validator cannot
+  // know from the scan directory. Skip them like external links to avoid false
+  // "file not found" (e.g. the shared "/dirMcsmgr/mMcsh2.css" stylesheet).
+  if (href.startsWith('/')) return { external: true };
   if (href.startsWith('#')) return { external: false, relFile: null, anchor: href.slice(1) };
 
   const [filePart, anchor] = href.split('#');
@@ -118,7 +124,8 @@ function checkSectionMcsDescription(files) {
       const descParas = sec.oParaByTitle['description'] ?? [];
       if (descParas.length === 0) {
         issues.push(issue('WARN', 'S02', f.sFileName, sec,
-          `SectCnpt "${sec.sSectTitle}" (${sec.sId}) has no description:: paragraph`));
+          `SectCnpt "${sec.sSectTitle}" (${sec.sId}) has no description:: paragraph`,
+          f.oIdLineMap.get(sec.sId) ?? null));
         continue;
       }
       // Check for empty/placeholder description (just "·" or whitespace)
@@ -129,7 +136,8 @@ function checkSectionMcsDescription(files) {
           .trim();
         if (content.length === 0) {
           issues.push(issue('WARN', 'S03', f.sFileName, sec,
-            `SectCnpt "${sec.sSectTitle}" (${sec.sId}) has an empty/placeholder description:: (only "·" or "×")`));
+            `SectCnpt "${sec.sSectTitle}" (${sec.sId}) has an empty/placeholder description:: (only "·" or "×")`,
+            f.oIdLineMap.get(p.sId) ?? f.oIdLineMap.get(sec.sId) ?? null));
         }
       }
     }
@@ -147,10 +155,12 @@ function checkSectionMcsName(files) {
       if (!sec.oParaByTitle['name']) {
         // This shouldn't happen (SectCnpt requires names), but guard anyway
         issues.push(issue('WARN', 'S04', f.sFileName, sec,
-          `SectCnpt "${sec.sSectTitle}" (${sec.sId}) has no name:: paragraph`));
+          `SectCnpt "${sec.sSectTitle}" (${sec.sId}) has no name:: paragraph`,
+          f.oIdLineMap.get(sec.sId) ?? null));
       } else if (sec.aNames.length === 0) {
         issues.push(issue('WARN', 'S05', f.sFileName, sec,
-          `SectCnpt "${sec.sSectTitle}" (${sec.sId}) name:: paragraph has no valid Mcs* entries`));
+          `SectCnpt "${sec.sSectTitle}" (${sec.sId}) name:: paragraph has no valid Mcs* entries`,
+          f.oIdLineMap.get(sec.sId) ?? null));
       }
     }
   }
@@ -164,7 +174,8 @@ function checkSectionMcsTitle(files) {
     for (const sec of f.aSectMcsObj) {
       if (!sec.sSectTitle || sec.sSectTitle.trim() === '') {
         issues.push(issue('WARN', 'S12', f.sFileName, sec,
-          `SectCnpt (${sec.sId}) has no TITLE`));
+          `SectCnpt (${sec.sId}) has no TITLE`,
+          f.oIdLineMap.get(sec.sId) ?? null));
       }
     }
   }
@@ -175,12 +186,15 @@ function checkSectionMcsTitle(files) {
 function checkDuplicateNames(files) {
   const issues = [];
   const nameMap = buildNameMap(files);
+  const oFileByName = new Map(files.map(f => [f.sFileName, f]));
   for (const [sBareName, occurrences] of nameMap) {
     if (occurrences.length > 1) {
       const locs = occurrences.map(o => `${o.sFileName}#${o.sId}`).join(', ');
-      // Report once per duplicate group
-      issues.push(issue('ERROR', 'S06', occurrences[1].sFileName, null,
-        `Duplicate McsEngl-name "${sBareName}" appears in: ${locs}`));
+      // Report once per duplicate group, at the second occurrence's line
+      const oOcc = occurrences[1];
+      const nLine = oFileByName.get(oOcc.sFileName)?.oIdLineMap.get(oOcc.sId) ?? null;
+      issues.push(issue('ERROR', 'S06', oOcc.sFileName, null,
+        `Duplicate McsEngl-name "${sBareName}" appears in: ${locs}`, nLine));
     }
   }
   return issues;
@@ -204,13 +218,14 @@ function checkBrokenLinks(files, dirPath) {
       if (!href || href === '#') continue;
       const resolved = resolveHref(href, sFileDir, dirPath);
       if (resolved.external) continue;
+      const nLine = f.oLinkLineMap.get(href) ?? null;
 
       if (resolved.relFile) {
         // File existence check
         const exists = existingRels.has(resolved.relFile) || fs.existsSync(resolved.absPath);
         if (!exists) {
           issues.push(issue('ERROR', 'S07', f.sFileName, null,
-            `Broken link: FILE not found "${resolved.relFile}" (from "${f.sFileName}/${href}")`));
+            `Broken link: FILE not found "${resolved.relFile}" (from "${f.sFileName}/${href}")`, nLine));
           continue;
         }
         // Anchor check
@@ -219,14 +234,14 @@ function checkBrokenLinks(files, dirPath) {
             ?? anchorMap.get(path.basename(resolved.relFile));
           if (targetIds && !targetIds.has(resolved.anchor)) {
             issues.push(issue('WARN', 'S08', f.sFileName, null,
-              `Possibly broken anchor: #${resolved.anchor} not found in "${resolved.relFile}"`));
+              `Possibly broken anchor: #${resolved.anchor} not found in "${resolved.relFile}"`, nLine));
           }
         }
       } else if (resolved.anchor) {
         // Same-file anchor
         if (!f.oSetIdAll.has(resolved.anchor)) {
           issues.push(issue('WARN', 'S08', f.sFileName, null,
-            `Same-file anchor #${resolved.anchor} not found in "${f.sFileName}"`));
+            `Same-file anchor #${resolved.anchor} not found in "${f.sFileName}"`, nLine));
         }
       }
     }
@@ -241,10 +256,12 @@ function checkVersionString(files) {
   for (const f of files) {
     if (!f.sVersion) {
       issues.push(issue('WARN', 'S09', f.sFileName, null,
-        `File "${f.sFileName}" has no version string in <title> (expected e.g. McsXxx.1-2-3.2026-01-01)`));
+        `File "${f.sFileName}" has no version string in <title> (expected e.g. McsXxx.1-2-3.2026-01-01)`,
+        f.nTitleLine ?? null));
     } else if (!f.sVersion.match(/Mcs\w+\.\d+-\d+-\d+\.\d{4}-\d{2}-\d{2}/)) {
       issues.push(issue('INFO', 'S09', f.sFileName, null,
-        `File "${f.sFileName}" version "${f.sVersion}" does not match pattern McsXxx.N-N-N.YYYY-MM-DD`));
+        `File "${f.sFileName}" version "${f.sVersion}" does not match pattern McsXxx.N-N-N.YYYY-MM-DD`,
+        f.nTitleLine ?? null));
     }
   }
   return issues;
@@ -265,7 +282,8 @@ function checkDates(files) {
           if (/\{[\d-]+\}/.test(line) && !/\\\(\s*(.*?)\s*\\\)/.test(line) &&
              !goodDate1.test(line) && !goodDate2.test(line) && !goodDate3.test(line)) {
             issues.push(issue('WARN', 'S10', f.sFileName, sec,
-              `DATE has NO {YYYY-MM-DD} format in line: "${line.trim()}" in file: "${f.sFileName}"`));
+              `DATE has NO {YYYY-MM-DD} format in line: "${line.trim()}" in file: "${f.sFileName}"`,
+              f.oIdLineMap.get(p.sId) ?? f.oIdLineMap.get(sec.sId) ?? null));
           }
         }
       }

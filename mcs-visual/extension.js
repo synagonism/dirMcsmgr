@@ -658,7 +658,7 @@ function fBuildShell(webview, url) {
   </div>
   <input id="idUrl" spellcheck="false" value="">
 </div>
-<div id="idFrameWrap"><iframe id="idF" src="${fEscapeAttr(url)}" allow="clipboard-read; clipboard-write"></iframe></div>
+<div id="idFrameWrap"><iframe id="idF" data-url="${fEscapeAttr(url)}" src="" allow="clipboard-read; clipboard-write"></iframe></div>
 <div id="idStatus"></div>
 <div id="idHint"></div>
 
@@ -671,7 +671,7 @@ function fBuildShell(webview, url) {
   const oHint = document.getElementById('idHint');
   const oBack = document.getElementById('idBack');
   const oFwd = document.getElementById('idFwd');
-  let bReady = false, nStatusT = null;
+  let bReady = false, nStatusT = null, nHintT = null;
   const sEditFlag = '?mcsv=1';
 
   function fToChrome(m){ m.source='mcsv-chrome'; vscode.postMessage(m); }
@@ -686,6 +686,14 @@ function fBuildShell(webview, url) {
   }
   function fShowStatus(m){ oStatusEl.textContent=m||''; oStatusEl.classList.add('clsShow'); if(nStatusT)clearTimeout(nStatusT); nStatusT=setTimeout(()=>oStatusEl.classList.remove('clsShow'),2600); }
   function fLoadUrl(u){ if(!u)return; if(!/[?&]mcsv=/.test(u)) u += (u.indexOf('?')<0?'?':'&')+'mcsv=1'; f.src=u; }
+  // Fresh cache-buster (keeps ?mcsv=1, strips old _r, preserves #hash) so a load that
+  // failed while the server was down is never re-served from cache.
+  function bust(u){ var h='',i=u.indexOf('#'); if(i>=0){h=u.slice(i);u=u.slice(0,i);} u=u.replace(/[?&]_r=\d+/g,''); if(!/[?&]mcsv=/.test(u)) u+=(u.indexOf('?')<0?'?':'&')+'mcsv=1'; u+=(u.indexOf('?')<0?'?':'&')+'_r='+Date.now(); return u+h; }
+  // Re-armable "server down?" hint (shows only if the bridge hasn't announced itself).
+  function armHint(){ if(nHintT)clearTimeout(nHintT); nHintT=setTimeout(function(){ if(bReady) return; oHint.style.display='block'; oHint.innerHTML='The live view did not load. Is your local server (XAMPP) running? <button id="idReloadb">Reload</button> <button id="idRawb">Open raw editor</button>'; var r=document.getElementById('idReloadb'); if(r) r.onclick=hardReload; var b=document.getElementById('idRawb'); if(b) b.onclick=function(){ fToChrome({type:'openRaw'}); }; }, 6000); }
+  // Reload the iframe from the chrome (no bridge needed) — recovers after the server
+  // was started, since the bridge relay can't work when nothing loaded.
+  function hardReload(){ bReady=false; oHint.style.display='none'; f.src=bust(f.getAttribute('data-url')||f.src); armHint(); }
 
   // history.back()/forward() are cross-origin from here (they throw), so relay to
   // the bridge inside the iframe, which is same-origin and can drive its history.
@@ -700,7 +708,7 @@ function fBuildShell(webview, url) {
   });
   // Reload the CURRENT page: the bridge reloads its live location.href — the iframe's
   // src attribute is stale after in-frame navigation, so it would refetch the first file.
-  document.getElementById('idReload').onclick = () => fToFrame('reloadPage', {keepPlace:false});  // ⟳ → honor URL #hash
+  document.getElementById('idReload').onclick = () => { if (bReady) fToFrame('reloadPage', {keepPlace:false}); else hardReload(); };  // ⟳ → bridge reload (honor #hash) or, if no bridge, hard-reload the iframe
   oBack.onclick = () => fToFrame('histBack');
   oFwd.onclick  = () => fToFrame('histFwd');
 
@@ -732,7 +740,7 @@ function fBuildShell(webview, url) {
     const d = e.data || {};
     if (d.source === 'mcsv') {
       if (d.type === 'closeMenu') { oMenu.classList.remove('clsOpen'); return; }   // iframe click dismisses the ... menu
-      if(d.type==='ready') bReady=true;
+      if(d.type==='ready'){ bReady=true; oHint.style.display='none'; }              // bridge loaded → clear the server-down hint
       vscode.postMessage(d);
       return;
     }
@@ -751,13 +759,10 @@ function fBuildShell(webview, url) {
 
   fToChrome({type:'ready'});
 
-  // If the bridge never announces itself, the local server is probably off.
-  setTimeout(() => {
-    if (bReady) return;
-    oHint.style.display='block';
-    oHint.innerHTML='The live view did not load. Is your local server (XAMPP) running? <button id="idRawb">Open raw editor</button>';
-    const b=document.getElementById('idRawb'); if(b) b.onclick=()=>fToChrome({type:'openRaw'});
-  }, 6000);
+  // Load the page (cache-busted so a prior server-down failure isn't re-served), and
+  // arm the "server down?" hint in case it doesn't come up.
+  f.src = bust(f.getAttribute('data-url'));
+  armHint();
 </script>
 </body></html>`;
 }

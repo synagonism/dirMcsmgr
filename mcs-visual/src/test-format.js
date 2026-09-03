@@ -16,7 +16,7 @@ const path = require('path');
 const { fFormat } = require('./mFormat');
 
 const bShowDiff = process.argv.includes('--diff');
-const sDirCor = path.resolve(__dirname, '../../../dirCor');
+const sDirCor = path.resolve(__dirname, '../../../dirMcsh/dirCor');
 
 const aFiles = fs.readdirSync(sDirCor).filter((f) => f.endsWith('.last.html'));
 let nTotalChanged = 0;

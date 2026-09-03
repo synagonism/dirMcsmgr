@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * MCS Consistency Checker
- * Checks dirMcsh-knowledge-base for structural and content issues.
- * Uses Ollama (local AI) for deep semantic checks when --ai flag is used.
+ * Checks dirMcsh-worldview for structural and content issues.
+ * Uses the DeepSeek Cloud API for deep semantic checks when --ai flag is used.
  *
  * Usage:
  *   node validator.js <dirMcsh-path>          # fast structural checks only
@@ -25,7 +25,7 @@ const
   args = process.argv.slice(2);
 
 if (args.length === 0) {
-  console.error('Usage dirMcsh: node Mcsmgr/validator.js <dirMcsh-path> [--ai] [--file <filename>] [--report]');
+  console.error('Usage dirMcsmgr: node validator.js <dirMcsh-path> [--ai] [--file <filename>] [--report]');
   process.exit(1);
 }
 
@@ -73,8 +73,8 @@ async function main() {
   reporter.print();
 
   if (saveReport) {
-    reporter.saveJson('mcs-report.json');
-    reporter.saveHtml('mcs-report.html');
+    reporter.saveJson('validator-report.json');
+    reporter.saveHtml('validator-report.html');
   }
 }
 

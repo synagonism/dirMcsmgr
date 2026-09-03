@@ -10,6 +10,13 @@ import path from 'path';
 const LEVEL_ICON = { ERROR: '❌', WARN: '⚠️ ', INFO: 'ℹ️ ' };
 const LEVEL_ORDER = { ERROR: 0, WARN: 1, INFO: 2 };
 
+/** Normalize an issue's concept to a title string.
+ *  structural.js stores it as a string; ai-checks may store the section object. */
+function fConceptTitle(concept) {
+  if (concept == null) return null;
+  return typeof concept === 'string' ? concept : (concept.sSectTitle ?? null);
+}
+
 export class Reporter {
   constructor() {
     this.issues = [];
@@ -67,7 +74,7 @@ export class Reporter {
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
     // Hint about report files
-    console.log('💡 Run with --report to save mcs-report.json and mcs-report.html\n');
+    console.log('💡 Run with --report to save validator-report.json and validator-report.html\n');
   }
 
   saveJson(outPath) {
@@ -83,7 +90,7 @@ export class Reporter {
         level: i.level,
         code: i.code,
         file: i.file,
-        concept: i.concept?.heading ?? null,
+        concept: fConceptTitle(i.concept),
         line: i.line ?? null,
         message: i.message,
       })),
@@ -100,7 +107,7 @@ export class Reporter {
         <td>${level}</td>
         <td>${i.code}</td>
         <td>${esc(i.file ?? '')}</td>
-        <td>${esc(i.concept?.heading ?? '')}</td>
+        <td>${esc(fConceptTitle(i.concept) ?? '')}</td>
         <td>${i.line ?? ''}</td>
         <td>${esc(i.message)}</td>
       </tr>`;

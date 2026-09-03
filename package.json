@@ -5,16 +5,14 @@
   "type": "module",
   "main": "validator.js",
   "scripts": {
-    "check": "node Mcsmng/validator.js",
-    "check:ai": "node Mcsmng/validator.js --ai"
+    "check": "node validator.js",
+    "check:ai": "node validator.js --ai"
   },
   "bin": {
-    "dirMcsh": "Mcsmng/validator.js"
+    "dirMcsh": "validator.js"
   },
   "dependencies": {
-    "@xenova/transformers": "^2.0.1",
     "glob": "^11.0.0",
-    "lancedb": "^0.0.1",
     "ollama": "^0.5.18"
   },
   "engines": {

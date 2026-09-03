@@ -1,6 +1,6 @@
 /**
  * parser.js
- * Parses MCS .last.html files into structured JavaScript objects.
+ * Parses Mcs*.last.html files into structured JavaScript objects.
  *
  * The three Mcs types in the whole-part structure:
  *
@@ -46,7 +46,6 @@
 import fs from 'fs';
 import path from 'path';
 import { globSync } from 'glob';
-import { type } from 'os';
 
 const
   aVersion = [
@@ -83,6 +82,31 @@ function fExtractId(sHtmlIn) {
   let aMtch;
   while ((aMtch = rId.exec(sHtmlIn)) !== null) oSetIds.add(aMtch[1]);
   return oSetIds;
+}
+
+/**
+ * DOING: map each first-group capture of rPattern to its 1-based line number.
+ *   Single O(n) pass — the regex must be global and its matches monotonic.
+ *   Keeps the FIRST line an equal key appears on.
+ * OUTPUT: Map<string, number>.
+ */
+function fBuildLineMap(sHtmlIn, rPattern) {
+  const oMap = new Map();
+  let aMtch, nLine = 1, nPos = 0;
+  rPattern.lastIndex = 0;
+  while ((aMtch = rPattern.exec(sHtmlIn)) !== null) {
+    while (nPos < aMtch.index) { if (sHtmlIn.charCodeAt(nPos) === 10) nLine++; nPos++; }
+    if (!oMap.has(aMtch[1])) oMap.set(aMtch[1], nLine);
+  }
+  return oMap;
+}
+
+/** 1-based line number of character offset nIdx in sHtmlIn (null if nIdx < 0). */
+function fLineAt(sHtmlIn, nIdx) {
+  if (nIdx == null || nIdx < 0) return null;
+  let nLine = 1;
+  for (let i = 0; i < nIdx && i < sHtmlIn.length; i++) if (sHtmlIn.charCodeAt(i) === 10) nLine++;
+  return nLine;
 }
 
 
@@ -128,26 +152,31 @@ function fReadNameEntries(sTextIn) {
 // ─── paragraph parser ─────────────────────────────────────────────────────────
 
 /**
- * DOING: Parse a single <p ...>...</p> HTML string.
- * OUTPUT: one object para:
+ * DOING: Parse a single block element (<p ...>...</p> or <div ...>...</div>).
+ * INPUT: sBlockHtml — the block's raw HTML; sTag — 'p' or 'div'.
+ * OUTPUT: one object paragraph:
  * {
- *   sType,         // Paragraph or ParaCnpt
+ *   sType,         // 'Paragraph' or 'ParaCnpt'
  *   sId,           // value of id= attribute, or null
- *   sParaTitle,    // keyword before "::" in the first text line, lowercased, or null
+ *   sParaTitle,    // keyword before "::" in the first text line, or null
  *   sText,         // full plain text content
+ *   aNameObj,      // parsed Mcs* name objects
  *   aNames,        // array of object-names
  *   aLinks,        // content hrefs
  * }
  */
-function fReadPMcshPara(sPHtml) {
-  const aIdMtch = sPHtml.match(/<p\b[^>]*\bid="([^"]+)"/);
-  const sId = aIdMtch ? aIdMtch[1] : null;
-  // console.log(`Parsing paragraph id=${sId}`);
+function fReadBlockMcshPara(sBlockHtml, sTag) {
+  const rId    = new RegExp(`<${sTag}\\b[^>]*\\bid="([^"]+)"`);
+  const rOpen  = new RegExp(`^<${sTag}[^>]*>`);
+  const rClose = new RegExp(`</${sTag}>\\s*$`);
 
-  // Remove the clsHide self-anchor at the end (always the last <a> in a <p>)
-  const sInner = sPHtml
-    .replace(/^<p[^>]*>/, '')
-    .replace(/<\/p>\s*$/, '')
+  const aIdMtch = sBlockHtml.match(rId);
+  const sId = aIdMtch ? aIdMtch[1] : null;
+
+  // Remove the clsHide self-anchor at the end (always the last <a> in the block)
+  const sInner = sBlockHtml
+    .replace(rOpen, '')
+    .replace(rClose, '')
     .replace(/<a\s+class="clsHide"[^>]*>[\s\S]*?<\/a>/g, '');
 
   const sText = fStripTags(sInner);
@@ -165,66 +194,15 @@ function fReadPMcshPara(sPHtml) {
 
   // A paragraph-concept: has an id AND has Mcs* names AND is NOT a name:: paragraph
   // (name::-paragraphs belong to the SectCnpt, not a separate concept)
-  const bIsParaCnpt = 
+  const bIsParaCnpt =
     sId !== null &&
     aNameObj.length > 0 &&
     sParaTitle !== 'name';
 
-  if (bIsParaCnpt) {
-    return { sType: 'ParaCnpt', sId, sParaTitle, sText, aNameObj, aNames, aLinks };
-  } else {
-    return { sType: 'Paragraph', sId, sParaTitle, sText, aNameObj, aNames, aLinks };
-  }
-}
-
-/**
- * DOING: Parse a single <div ...>...</div> HTML string.
- * OUTPUT: Returns one object paragraph:
- * {
- *   stype:         // 'Paragraph | ParaCnpt',
- *   sId,           // value of id= attribute, or null
- *   sParaTitle,    // keyword before "::" in the first text line, lowercased, or null
- *   sText,         // full plain text content
- *   aNames,        // array of object-names
- *   aLinks,        // content hrefs
- * }
- */
-function fReadDivMcshPara(sDivHtml) {
-  const aIdMtch = sDivHtml.match(/<div\b[^>]*\bid="([^"]+)"/);
-  const sId = aIdMtch ? aIdMtch[1] : null;
-  // console.log(`Parsing paragraph id=${sId}`);
-
-  // Remove the clsHide self-anchor at the end (always the last <a> in a <p>)
-  const sInner = sDivHtml
-    .replace(/^<div[^>]*>/, '')
-    .replace(/<\/div>\s*$/, '')
-    .replace(/<a\s+class="clsHide"[^>]*>[\s\S]*?<\/a>/g, '');
-
-  const sText = fStripTags(sInner);
-
-  // sParaTitle: first "text::" pattern
-  const aTitleMtch = sText.match(/^([^:\n]+)::/);
-  const sParaTitle = aTitleMtch ? aTitleMtch[1].trim() : null;
-
-  // hrefs (content only)
-  const aLinks = fExtractContentHrefs(sInner);
-
-  // Name entries — parse regardless of sParaTitle, so paragraph-Mcs can be detected
-  const aNameObj = fReadNameEntries(sText);
-  const aNames = aNameObj.map(o => o.sBareName);
-
-  // A paragraph-Mcs: has an id AND has Mcs* names AND is NOT a name:: paragraph
-  // (name:: paragraphs belong to the SectCnpt, not a separate concept)
-  const bIsParaMcs = 
-    sId !== null &&
-    aNameObj.length > 0 &&
-    sParaTitle !== 'name';
-
-  if (bIsParaMcs) {
-    return { sType: 'ParaCnpt', sId, sParaTitle, sText: sText, aNameObj, aNames, aLinks };
-  } else {
-    return { sType: 'Paragraph', sId, sParaTitle, sText: sText, aNameObj, aNames, aLinks };
-  }
+  return {
+    sType: bIsParaCnpt ? 'ParaCnpt' : 'Paragraph',
+    sId, sParaTitle, sText, aNameObj, aNames, aLinks,
+  };
 }
 
 
@@ -389,12 +367,10 @@ function fReadSection({ sId, sRawHtml, nDepth, sIdWhole }) {
   const rDiv = /<div\b[^>]*>[\s\S]*?<\/div>/gi;
   let aParaMtch;
   while ((aParaMtch = rP.exec(sOuterSect)) !== null) {
-    const p = fReadPMcshPara(aParaMtch[0]);
-    aSectPara.push(p);
+    aSectPara.push(fReadBlockMcshPara(aParaMtch[0], 'p'));
   }
   while ((aParaMtch = rDiv.exec(sOuterSect)) !== null) {
-    const p = fReadDivMcshPara(aParaMtch[0]);
-    aSectPara.push(p);
+    aSectPara.push(fReadBlockMcshPara(aParaMtch[0], 'div'));
   }
 
   // Index paragraphs by title for quick lookup
@@ -413,8 +389,13 @@ function fReadSection({ sId, sRawHtml, nDepth, sIdWhole }) {
   // All content hrefs across the entire section (including nested children)
   const aLinks = fExtractContentHrefs(sRawHtml);
 
+  // A SectCnpt is a section that carries a name:: paragraph with at least one
+  // valid Mcs* entry. Structural sections (TOC, headers, plain prose) have no
+  // name:: and are labelled 'Section' so they are not treated as concepts.
+  const bIsSectCnpt = (oParaByTitle['name'] ?? []).length > 0 && aNames.length > 0;
+
   return {
-    type: 'SectCnpt',
+    sType: bIsSectCnpt ? 'SectCnpt' : 'Section',
     sId,
     sSectTitle,
     nHeadingLevel,
@@ -461,11 +442,19 @@ export function parseFile(sFilePath) {
       aParaObj: [],
       oSetIdAll: new Set(),
       aLinks: [],
+      oIdLineMap: new Map(),
+      oLinkLineMap: new Map(),
+      nTitleLine: null,
     };
   }
 
+  // ── line maps (id= and href= → 1-based line) for report line numbers ──────
+  const oIdLineMap   = fBuildLineMap(sFileRaw, /\bid="([^"]+)"/g);
+  const oLinkLineMap = fBuildLineMap(sFileRaw, /href="([^"]+)"/g);
+
   // ── <title> ──────────────────────────────────────────────────────────────
   const aTitleMach = sFileRaw.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+  const nTitleLine = aTitleMach ? fLineAt(sFileRaw, aTitleMach.index) : null;
   const titleRaw = aTitleMach ? fStripTags(aTitleMach[1]) : '';
   const versionM = titleRaw.match(/\(([^)]+)\)/);
   const sVersion  = versionM ? versionM[1].trim() : null; //McsCor000015.1-7-0.2026-06-22
@@ -496,18 +485,9 @@ export function parseFile(sFilePath) {
     if (oSec.sType === 'SectCnpt') aSectionMcs.push(oSec);
     if (oSec.sId === 'idOverview') oFileMcsSect = oSec;
 
-    // Collect paragraph-Mcs from this section's direct paragraphs
-    const outer2 = fFindOuterSection(oRawSec.sRawHtml);
-    const rP2 = /<p\b[^>]*>[\s\S]*?<\/p>/gi;
-    // paragraphs could-be and div with p|table|ol|ul members
-    const rDiv2 = /<div\b[^>]*>[\s\S]*?<\/div>/gi;
-    let aParaMtch;
-    while ((aParaMtch = rP2.exec(outer2)) !== null) {
-      aParaObj.push(fReadPMcshPara(aParaMtch[0]));
-    }
-    while ((aParaMtch = rDiv2.exec(outer2)) !== null) {
-      aParaObj.push(fReadDivMcshPara(aParaMtch[0]));
-    }
+    // Collect this section's direct paragraphs — already parsed by fReadSection
+    // (same fFindOuterSection + <p>/<div> logic), so reuse instead of re-parsing.
+    aParaObj.push(...oSec.aParaObj);
   }
 
   return {
@@ -522,6 +502,9 @@ export function parseFile(sFilePath) {
     aParaObj,
     oSetIdAll,
     aLinks,
+    oIdLineMap,
+    oLinkLineMap,
+    nTitleLine,
   };
 }
 

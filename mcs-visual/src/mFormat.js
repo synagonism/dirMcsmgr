@@ -6,6 +6,7 @@
  *   • col 0     — document skeleton: <!doctype> <html> <head> <body> + closes
  *   • 2 spaces  — block elements: every <section> <header> <footer> <h1..9> <p>
  *                 <div>, block comments <!-- -->, and body-level <script> tags
+ *                 (a <p> nested inside an open <div> indents to 4 instead)
  *   • 4 spaces  — EVERYTHING ELSE (<br> segments, clsHide tails, standalone
  *                 </p></hN></div></span>, table rows, wrapped inline links, ...)
  *   • <script> body — shifted so its outermost JS line sits at 4 spaces, with the
@@ -56,6 +57,8 @@ function fClassify(lower) {
 const fLeadLen = (s) => (s.match(/^[ \t]*/) || [''])[0].length;
 /** Net <ul> nesting change on a line: opens − closes (for clsTreeUl trees). */
 const fUlDelta = (lower) => (lower.match(/<ul[\s>]/g) || []).length - (lower.match(/<\/ul\s*>/g) || []).length;
+/** Net <div> nesting change on a line: opens − closes (a <p> inside a div → 4). */
+const fDivDelta = (lower) => (lower.match(/<div[\s>]/g) || []).length - (lower.match(/<\/div\s*>/g) || []).length;
 
 /**
  * Re-indent one Mcsh|Hitp document to canonical form.
@@ -71,6 +74,7 @@ function fFormat(source) {
   let bInHead = true;     // up to and including the <body ...> line: verbatim
   let bInPre = false;     // inside a <pre>…</pre>: verbatim
   let nTreeDepth = 0;     // >0 while inside a <ul class="clsTreeUl"> tree: verbatim
+  let nDivDepth = 0;      // >0 while inside an open <div>: a <p> opener there → 4
   let aScriptBuf = null;  // collecting a <script> body (array of raw lines) or null
 
   const aOut = [];
@@ -145,8 +149,13 @@ function fFormat(source) {
       continue;
     }
 
-    const nInd = fClassify(sLower);
+    const nInd0 = fClassify(sLower);
+    // A <p> opener inside an open <div> nests one level deeper: 4 instead of 2.
+    const bPara = /^<p[\s>]/.test(sLower) || sLower === '<p';
+    const nInd = (nInd0 === 2 && bPara && nDivDepth > 0) ? 4 : nInd0;
     aOut.push((nInd ? ' '.repeat(nInd) : '') + sStripped);
+    nDivDepth += fDivDelta(sLower);          // after classifying: the <div> opener itself stays 2
+    if (nDivDepth < 0) nDivDepth = 0;
   }
 
   if (aScriptBuf) fFlushScript();                  // unterminated <script> (defensive)

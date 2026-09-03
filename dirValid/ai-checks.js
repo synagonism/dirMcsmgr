@@ -95,7 +95,7 @@ Answer:`;
   const reply = await ask(prompt, 100);
   if (reply.startsWith('DRIFT:')) {
     return {
-      level: 'WARN', code: 'A01', file: sFileName, concept: sec,
+      level: 'WARN', code: 'A01', file: sFileName, concept: sec.sSectTitle,
       message: `Semantic drift in "${sec.sSectTitle}": ${reply.replace('DRIFT:', '').trim()}`,
     };
   }
@@ -130,7 +130,7 @@ Answer:`;
   if (reply.startsWith('UNDEFINED:')) {
     const terms = reply.replace('UNDEFINED:', '').trim();
     return {
-      level: 'INFO', code: 'A02', file: sFileName, concept: sec,
+      level: 'INFO', code: 'A02', file: sFileName, concept: sec.sSectTitle,
       message: `Possibly undefined terms in "${sec.sSectTitle}": ${terms}`,
     };
   }
@@ -164,7 +164,7 @@ Answer:`;
   if (reply.startsWith('SUGGEST:')) {
     const suggestions = reply.replace('SUGGEST:', '').trim();
     return {
-      level: 'INFO', code: 'A03', file: sFileName, concept: sec,
+      level: 'INFO', code: 'A03', file: sFileName, concept: sec.sSectTitle,
       message: `Possible missing aliases for "${sec.sSectTitle}": ${suggestions}`,
     };
   }
@@ -206,7 +206,7 @@ Answer:`;
         issues.push({
           level: 'WARN', code: 'A04',
           file: f1,
-          concept: s1,
+          concept: s1.sSectTitle,
           message: `Possible duplicate: "${s1.sSectTitle}" (${f1}) and "${s2.sSectTitle}" (${f2}): ${reply.replace('SIMILAR:', '').trim()}`,
         });
       }
