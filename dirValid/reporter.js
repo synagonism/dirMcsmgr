@@ -2,118 +2,119 @@
  * reporter.js
  * Collects issues and prints a summary report.
  * Can also write JSON and HTML reports.
+ *
+ * Issue object shape (from structural.js / ai-checks.js):
+ *   { sLevel, sCode, sNameFile, sConcept, sIdConcept, nLine, sMessage }
  */
 
 import fs from 'fs';
 import path from 'path';
 
-const LEVEL_ICON = { ERROR: '❌', WARN: '⚠️ ', INFO: 'ℹ️ ' };
-const LEVEL_ORDER = { ERROR: 0, WARN: 1, INFO: 2 };
+const oLevelIcon  = { ERROR: '❌', WARN: '⚠️ ', INFO: 'ℹ️ ' };
+const oLevelOrder = { ERROR: 0, WARN: 1, INFO: 2 };
 
 /** Normalize an issue's concept to a title string.
  *  structural.js stores it as a string; ai-checks may store the section object. */
-function fConceptTitle(concept) {
-  if (concept == null) return null;
-  return typeof concept === 'string' ? concept : (concept.sSectTitle ?? null);
+function fTitleConcept(oConcept) {
+  if (oConcept == null) return null;
+  return typeof oConcept === 'string' ? oConcept : (oConcept.sNameTitle ?? null);
 }
 
-export class Reporter {
-  constructor() {
-    this.issues = [];
+export function fReporter() {
+  const aoIssue = [];
+
+  function fAdd(oIssue) {
+    if (oIssue) aoIssue.push(oIssue);
   }
 
-  add(issue) {
-    if (issue) this.issues.push(issue);
+  function fAddAll(aoIn) {
+    for (const oIssue of aoIn) fAdd(oIssue);
   }
 
-  addAll(issues) {
-    for (const i of issues) this.add(i);
-  }
+  const fError = () => aoIssue.filter(oIssue => oIssue.sLevel === 'ERROR');
+  const fWarn  = () => aoIssue.filter(oIssue => oIssue.sLevel === 'WARN');
+  const fInfo  = () => aoIssue.filter(oIssue => oIssue.sLevel === 'INFO');
 
-  get errors()   { return this.issues.filter(i => i.level === 'ERROR'); }
-  get warnings() { return this.issues.filter(i => i.level === 'WARN'); }
-  get infos()    { return this.issues.filter(i => i.level === 'INFO'); }
-
-  print() {
+  function fPrint() {
     console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('  Results');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
-    if (this.issues.length === 0) {
+    if (aoIssue.length === 0) {
       console.log('✅  No issues found!\n');
       return;
     }
 
     // Group by file
-    const byFile = new Map();
-    for (const issue of this.issues) {
-      const mkey = issue.file ?? '(global)';
-      if (!byFile.has(mkey)) byFile.set(mkey, []);
-      byFile.get(mkey).push(issue);
+    const oMapByFile = new Map();
+    for (const oIssue of aoIssue) {
+      const sKey = oIssue.sNameFile ?? '(global)';
+      if (!oMapByFile.has(sKey)) oMapByFile.set(sKey, []);
+      oMapByFile.get(sKey).push(oIssue);
     }
 
     // Print sorted: errors first, then warnings, then info
-    const sortedFiles = [...byFile.keys()].sort();
-    for (const file of sortedFiles) {
-      const fileIssues = byFile.get(file).sort(
-        (a, b) => LEVEL_ORDER[a.level] - LEVEL_ORDER[b.level]
+    const aFileSorted = [...oMapByFile.keys()].sort();
+    for (const sFile of aFileSorted) {
+      const aoIssueFile = oMapByFile.get(sFile).sort(
+        (oA, oB) => oLevelOrder[oA.sLevel] - oLevelOrder[oB.sLevel]
       );
-      console.log(`📄 ${file}`);
-      for (const iss of fileIssues) {
-        const loc = iss.line ? `:${iss.line}` : '';
-        const icon = LEVEL_ICON[iss.level];
-        const code = `[${iss.code}]`.padEnd(6);
-        console.log(`   ${icon} ${code}  ${iss.message}${loc ? `  (line ${iss.line})` : ''}`);
+      console.log(`📄 ${sFile}`);
+      for (const oIssue of aoIssueFile) {
+        const sLoc = oIssue.nLine ? `:${oIssue.nLine}` : '';
+        const sIcon = oLevelIcon[oIssue.sLevel];
+        const sCode = `[${oIssue.sCode}]`.padEnd(6);
+        console.log(`   ${sIcon} ${sCode}  ${oIssue.sMessage}${sLoc ? `  (line ${oIssue.nLine})` : ''}`);
       }
       console.log();
     }
 
     // Summary
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log(`  SUMMARY: ${this.errors.length} errors  |  ${this.warnings.length} warnings  |  ${this.infos.length} info`);
+    console.log(`  SUMMARY: ${fError().length} errors  |  ${fWarn().length} warnings  |  ${fInfo().length} info`);
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
     // Hint about report files
     console.log('💡 Run with --report to save validator-report.json and validator-report.html\n');
   }
 
-  saveJson(outPath) {
-    const data = {
-      generated: new Date().toISOString(),
-      summary: {
-        total: this.issues.length,
-        errors: this.errors.length,
-        warnings: this.warnings.length,
-        infos: this.infos.length,
+  function fSaveJson(sPathOut) {
+    const oData = {
+      sGenerated: new Date().toISOString(),
+      oSummary: {
+        nTotal: aoIssue.length,
+        nError: fError().length,
+        nWarn: fWarn().length,
+        nInfo: fInfo().length,
       },
-      issues: this.issues.map(i => ({
-        level: i.level,
-        code: i.code,
-        file: i.file,
-        concept: fConceptTitle(i.concept),
-        line: i.line ?? null,
-        message: i.message,
+      aoIssue: aoIssue.map(oIssue => ({
+        sLevel: oIssue.sLevel,
+        sCode: oIssue.sCode,
+        sNameFile: oIssue.sNameFile,
+        sConcept: fTitleConcept(oIssue.sConcept),
+        nLine: oIssue.nLine ?? null,
+        sMessage: oIssue.sMessage,
       })),
     };
-    fs.writeFileSync(outPath, JSON.stringify(data, null, 2), 'utf8');
-    console.log(`📊 JSON report saved: ${outPath}`);
+    fs.writeFileSync(sPathOut, JSON.stringify(oData, null, 2), 'utf8');
+    console.log(`📊 JSON report saved: ${sPathOut}`);
   }
 
-  saveHtml(outPath) {
-    const rows = this.issues.map(i => {
-      const level = i.level;
-      const rowClass = level === 'ERROR' ? 'err' : level === 'WARN' ? 'wrn' : 'inf';
-      return `<tr class="${rowClass}">
-        <td>${level}</td>
-        <td>${i.code}</td>
-        <td>${esc(i.file ?? '')}</td>
-        <td>${esc(fConceptTitle(i.concept) ?? '')}</td>
-        <td>${i.line ?? ''}</td>
-        <td>${esc(i.message)}</td>
+  function fSaveHtml(sPathOut) {
+    const sRows = aoIssue.map(oIssue => {
+      const sLevel = oIssue.sLevel;
+      const sClassRow = sLevel === 'ERROR' ? 'err' : sLevel === 'WARN' ? 'wrn' : 'inf';
+      return `<tr class="${sClassRow}">
+        <td>${sLevel}</td>
+        <td>${oIssue.sCode}</td>
+        <td>${fEsc(oIssue.sNameFile ?? '')}</td>
+        <td>${fEsc(fTitleConcept(oIssue.sConcept) ?? '')}</td>
+        <td>${oIssue.nLine ?? ''}</td>
+        <td>${fEsc(oIssue.sMessage)}</td>
       </tr>`;
     }).join('\n');
 
-    const html = `<!DOCTYPE html>
+    const sHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -137,9 +138,9 @@ export class Reporter {
 <h1>MCS Consistency Report</h1>
 <p>Generated: ${new Date().toLocaleString()}</p>
 <div class="summary">
-  <span style="color:#c00">❌ ${this.errors.length} errors</span>
-  <span style="color:#c60">⚠️ ${this.warnings.length} warnings</span>
-  <span style="color:#069">ℹ️ ${this.infos.length} info</span>
+  <span style="color:#c00">❌ ${fError().length} errors</span>
+  <span style="color:#c60">⚠️ ${fWarn().length} warnings</span>
+  <span style="color:#069">ℹ️ ${fInfo().length} info</span>
 </div>
 <input type="text" id="filter" placeholder="Filter by file or message..." oninput="filterRows(this.value)">
 <table>
@@ -147,7 +148,7 @@ export class Reporter {
     <tr><th>Level</th><th>Code</th><th>File</th><th>Concept</th><th>Line</th><th>Message</th></tr>
   </thead>
   <tbody id="tbody">
-    ${rows}
+    ${sRows}
   </tbody>
 </table>
 <script>
@@ -160,11 +161,13 @@ function filterRows(q) {
 </script>
 </body>
 </html>`;
-    fs.writeFileSync(outPath, html, 'utf8');
-    console.log(`🌐 HTML report saved: ${outPath}`);
+    fs.writeFileSync(sPathOut, sHtml, 'utf8');
+    console.log(`🌐 HTML report saved: ${sPathOut}`);
   }
+
+  return { fAdd, fAddAll, fPrint, fSaveJson, fSaveHtml };
 }
 
-function esc(s) {
-  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+function fEsc(sIn) {
+  return String(sIn).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }

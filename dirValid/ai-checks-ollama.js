@@ -1,6 +1,7 @@
 /**
- * ai-checks.js
+ * ai-checks-ollama.js
  * Semantic consistency checks powered by Ollama (local LLM).
+ * Legacy backend — not wired into validator.js (which uses ai-checks.js / DeepSeek).
  *
  * Requires Ollama running locally: https://ollama.com
  * Model: llama3.2 (or whatever you have — configurable below)
@@ -17,46 +18,47 @@ import { Ollama } from 'ollama';
 
 const
   aVersion = [
+    'ai-checks-ollama.js.0-2-0.2026-09-04: naming convention',
     'ai-checks.js.0-1-0.2026-04-28: creation'
   ]
 
 
-const ollama = new Ollama({ host: 'http://localhost:11434' });
-const MODEL = process.env.MCS_MODEL ?? 'llama3.2';
+const oOllama = new Ollama({ host: 'http://localhost:11434' });
+const sModel = process.env.MCS_MODEL ?? 'llama3.2';
 
 // How many concepts to AI-check per run (keep low for speed, raise as needed)
-const MAX_AI_CONCEPTS = 50;
+const nMaxConcept = 50;
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
-async function ask(prompt, maxTokens = 300) {
+async function fAsk(sPrompt, nMaxToken = 300) {
   try {
-    const res = await ollama.chat({
-      model: MODEL,
-      options: { num_predict: maxTokens, temperature: 0.1 },
-      messages: [{ role: 'user', content: prompt }],
+    const oRes = await oOllama.chat({
+      model: sModel,
+      options: { num_predict: nMaxToken, temperature: 0.1 },
+      messages: [{ role: 'user', content: sPrompt }],
     });
-    return res.message.content.trim();
+    return oRes.message.content.trim();
   } catch (e) {
     throw new Error(`Ollama error (is it running?): ${e.message}`);
   }
 }
 
-function conceptSummary(sec) {
-  const descParas = sec.oParaByTitle?.['description'] ?? [];
-  const desc = descParas.map(p => p.sText.replace(/^description::\s*/i, '')).join('\n').slice(0, 600);
-  const names = (sec.aNameObj ?? []).slice(0, 5).map(n => n.sRaw).join(', ');
-  return `Heading: "${sec.sSectTitle}"\nNames: ${names || 'none'}\nDescription:\n${desc}`;
+function fSummaryConcept(oSect) {
+  const aoParaDesc = oSect.oParaByTitle?.['description'] ?? [];
+  const sDesc = aoParaDesc.map(oPara => oPara.sText.replace(/^description::\s*/i, '')).join('\n').slice(0, 600);
+  const sName = (oSect.aoName ?? []).slice(0, 5).map(oName => oName.sNameRaw).join(', ');
+  return `Heading: "${oSect.sNameTitle}"\nNames: ${sName || 'none'}\nDescription:\n${sDesc}`;
 }
 
 // ─── A01: semantic drift ───────────────────────────────────────────────────────
 
-async function checkSemanticDrift(sec, fileName) {
-  const summary = conceptSummary(sec);
-  const prompt = `You are checking a structured knowledge base called MCS.
+async function fCheckDrift(oSect, sNameFile) {
+  const sSummary = fSummaryConcept(oSect);
+  const sPrompt = `You are checking a structured knowledge base called MCS.
 Each concept has a heading and a description. They should be semantically consistent.
 
-${summary}
+${sSummary}
 
 Question: Does the description accurately describe what the heading says?
 Answer ONLY with one of:
@@ -65,11 +67,11 @@ Answer ONLY with one of:
 
 Answer:`;
 
-  const reply = await ask(prompt, 100);
-  if (reply.startsWith('DRIFT:')) {
+  const sReply = await fAsk(sPrompt, 100);
+  if (sReply.startsWith('DRIFT:')) {
     return {
-      level: 'WARN', code: 'A01', file: fileName, concept: sec.sSectTitle,
-      message: `Semantic drift in "${sec.sSectTitle}": ${reply.replace('DRIFT:', '').trim()}`,
+      sLevel: 'WARN', sCode: 'A01', sNameFile, sConcept: oSect.sNameTitle,
+      sMessage: `Semantic drift in "${oSect.sNameTitle}": ${sReply.replace('DRIFT:', '').trim()}`,
     };
   }
   return null;
@@ -77,20 +79,20 @@ Answer:`;
 
 // ─── A02: undefined terms ─────────────────────────────────────────────────────
 
-async function checkUndefinedTerms(sec, fileName) {
-  const descParas = sec.oParaByTitle?.['description'] ?? [];
-  const desc = descParas.map(p => p.sText.replace(/^description::\s*/i, '')).join('\n').slice(0, 800);
-  const names = (sec.aNameObj ?? []).map(n => n.sRaw).join(', ');
-  if (!desc.trim()) return null;
+async function fCheckTermUndefined(oSect, sNameFile) {
+  const aoParaDesc = oSect.oParaByTitle?.['description'] ?? [];
+  const sDesc = aoParaDesc.map(oPara => oPara.sText.replace(/^description::\s*/i, '')).join('\n').slice(0, 800);
+  const sName = (oSect.aoName ?? []).map(oName => oName.sNameRaw).join(', ');
+  if (!sDesc.trim()) return null;
 
-  const prompt = `You are reviewing a concept in a knowledge base that aims to be fully monosemantic.
-Every technical or domain-specific term used in a description should either be defined in the 
+  const sPrompt = `You are reviewing a concept in a knowledge base that aims to be fully monosemantic.
+Every technical or domain-specific term used in a description should either be defined in the
 concept's own name:: section or be a standard English word.
 
-Concept heading: "${sec.sSectTitle}"
-Defined names: ${names || 'none'}
+Concept heading: "${oSect.sNameTitle}"
+Defined names: ${sName || 'none'}
 Description:
-${desc}
+${sDesc}
 
 List any terms/names in the description that appear to be undefined jargon or knowledge-base-specific
 terms that are NOT in the defined names list above.
@@ -99,12 +101,12 @@ If some, respond: UNDEFINED: term1, term2, term3 (max 5)
 
 Answer:`;
 
-  const reply = await ask(prompt, 80);
-  if (reply.startsWith('UNDEFINED:')) {
-    const terms = reply.replace('UNDEFINED:', '').trim();
+  const sReply = await fAsk(sPrompt, 80);
+  if (sReply.startsWith('UNDEFINED:')) {
+    const sTerm = sReply.replace('UNDEFINED:', '').trim();
     return {
-      level: 'INFO', code: 'A02', file: fileName, concept: sec.sSectTitle,
-      message: `Possibly undefined terms in "${sec.sSectTitle}": ${terms}`,
+      sLevel: 'INFO', sCode: 'A02', sNameFile, sConcept: oSect.sNameTitle,
+      sMessage: `Possibly undefined terms in "${oSect.sNameTitle}": ${sTerm}`,
     };
   }
   return null;
@@ -112,33 +114,33 @@ Answer:`;
 
 // ─── A03: suggest missing name aliases ───────────────────────────────────────
 
-async function checkMissingAliases(sec, fileName) {
-  const descParas = sec.oParaByTitle?.['description'] ?? [];
-  const desc = descParas.map(p => p.sText.replace(/^description::\s*/i, '')).join('\n').slice(0, 500);
-  const names = (sec.aNameObj ?? []).map(n => n.sRaw).join('\n');
-  if (!desc.trim() || !sec.aNames?.length) return null;
+async function fCheckAliasMissing(oSect, sNameFile) {
+  const aoParaDesc = oSect.oParaByTitle?.['description'] ?? [];
+  const sDesc = aoParaDesc.map(oPara => oPara.sText.replace(/^description::\s*/i, '')).join('\n').slice(0, 500);
+  const sName = (oSect.aoName ?? []).map(oName => oName.sNameRaw).join('\n');
+  if (!sDesc.trim() || !oSect.aName?.length) return null;
 
-  const prompt = `You are helping manage a structured knowledge base with strict naming conventions.
+  const sPrompt = `You are helping manage a structured knowledge base with strict naming conventions.
 McsEngl names follow patterns like: McsEngl.Domain.Subdomain, McsEngl.ConceptName, McsEngl.concept-with-hyphens
 
-Existing names for concept "${sec.sSectTitle}":
-${names}
+Existing names for concept "${oSect.sNameTitle}":
+${sName}
 
-Description: ${desc}
+Description: ${sDesc}
 
-Suggest up to 3 ADDITIONAL McsEngl name entries that would be natural aliases 
+Suggest up to 3 ADDITIONAL McsEngl name entries that would be natural aliases
 based on the description but are NOT already in the list above.
 Only suggest if you are confident. If none needed, say: NONE
 Format: SUGGEST: McsEngl.Name1, McsEngl.Name2
 
 Answer:`;
 
-  const reply = await ask(prompt, 100);
-  if (reply.startsWith('SUGGEST:')) {
-    const suggestions = reply.replace('SUGGEST:', '').trim();
+  const sReply = await fAsk(sPrompt, 100);
+  if (sReply.startsWith('SUGGEST:')) {
+    const sSuggest = sReply.replace('SUGGEST:', '').trim();
     return {
-      level: 'INFO', code: 'A03', file: fileName, concept: sec.sSectTitle,
-      message: `Possible missing aliases for "${sec.sSectTitle}": ${suggestions}`,
+      sLevel: 'INFO', sCode: 'A03', sNameFile, sConcept: oSect.sNameTitle,
+      sMessage: `Possible missing aliases for "${oSect.sNameTitle}": ${sSuggest}`,
     };
   }
   return null;
@@ -147,26 +149,26 @@ Answer:`;
 // ─── A04: duplicate description detection ────────────────────────────────────
 // Compare concept descriptions in small batches to find suspicious similarity
 
-async function checkNearDuplicates(samples) {
-  const issues = [];
-  const SAMPLE = 20;
-  const sampled = samples.slice(0, SAMPLE);
+async function fCheckDuplicateNear(aoSample) {
+  const aoIssue = [];
+  const nSample = 20;
+  const aoSampled = aoSample.slice(0, nSample);
 
-  for (let i = 0; i < sampled.length; i++) {
-    for (let j = i + 1; j < sampled.length; j++) {
-      const [s1, f1] = sampled[i];
-      const [s2, f2] = sampled[j];
-      const descOf = s => (s.oParaByTitle?.['description'] ?? [])
-        .map(p => p.sText.replace(/^description::\s*/i, '')).join(' ').slice(0, 300);
-      const d1 = descOf(s1);
-      const d2 = descOf(s2);
-      if (!d1 || !d2) continue;
+  for (let i = 0; i < aoSampled.length; i++) {
+    for (let j = i + 1; j < aoSampled.length; j++) {
+      const [oS1, sF1] = aoSampled[i];
+      const [oS2, sF2] = aoSampled[j];
+      const fDescOf = oS => (oS.oParaByTitle?.['description'] ?? [])
+        .map(oPara => oPara.sText.replace(/^description::\s*/i, '')).join(' ').slice(0, 300);
+      const sD1 = fDescOf(oS1);
+      const sD2 = fDescOf(oS2);
+      if (!sD1 || !sD2) continue;
 
-      const prompt = `Compare these two concept descriptions from a knowledge base.
+      const sPrompt = `Compare these two concept descriptions from a knowledge base.
 Are they describing the same concept (potential duplicate)?
 
-Concept A (${s1.sSectTitle}): ${d1}
-Concept B (${s2.sSectTitle}): ${d2}
+Concept A (${oS1.sNameTitle}): ${sD1}
+Concept B (${oS2.sNameTitle}): ${sD2}
 
 Answer ONLY:
 - DIFFERENT
@@ -174,56 +176,56 @@ Answer ONLY:
 
 Answer:`;
 
-      const reply = await ask(prompt, 60);
-      if (reply.startsWith('SIMILAR:')) {
-        issues.push({
-          level: 'WARN', code: 'A04',
-          file: f1,
-          concept: s1.sSectTitle,
-          message: `Possible duplicate: "${s1.sSectTitle}" (${f1}) and "${s2.sSectTitle}" (${f2}): ${reply.replace('SIMILAR:', '').trim()}`,
+      const sReply = await fAsk(sPrompt, 60);
+      if (sReply.startsWith('SIMILAR:')) {
+        aoIssue.push({
+          sLevel: 'WARN', sCode: 'A04',
+          sNameFile: sF1,
+          sConcept: oS1.sNameTitle,
+          sMessage: `Possible duplicate: "${oS1.sNameTitle}" (${sF1}) and "${oS2.sNameTitle}" (${sF2}): ${sReply.replace('SIMILAR:', '').trim()}`,
         });
       }
     }
   }
-  return issues;
+  return aoIssue;
 }
 
 // ─── main export ──────────────────────────────────────────────────────────────
 
-export async function runAiChecks(files) {
-  const issues = [];
+export async function fRunChecksAi(aoFile) {
+  const aoIssue = [];
 
-  // Flatten all SectCnpt with file reference; filter to those with descriptions
-  const allSections = [];
-  for (const f of files) {
-    for (const sec of f.aSectMcsObj) {
-      allSections.push([sec, f.fileName]);
+  // Flatten all cnptSect with file reference; filter to those with descriptions
+  const aoSect = [];
+  for (const oFile of aoFile) {
+    for (const oSect of oFile.aoCnptSect) {
+      aoSect.push([oSect, oFile.sNameFile]);
     }
   }
 
-  const sample = allSections
-    .filter(([s]) => {
-      const hasDesc = (s.oParaByTitle?.['description'] ?? []).length > 0;
-      return hasDesc && s.aNames.length > 0;
+  const aoSample = aoSect
+    .filter(([oS]) => {
+      const bHasDesc = (oS.oParaByTitle?.['description'] ?? []).length > 0;
+      return bHasDesc && oS.aName.length > 0;
     })
-    .slice(0, MAX_AI_CONCEPTS);
+    .slice(0, nMaxConcept);
 
-  const total = sample.length;
-  console.log(`   Checking ${total} SectCnpt (of ${allSections.length} total)`);
-  console.log(`   Model: ${MODEL}  (set MCS_MODEL env var to change)\n`);
+  const nTotal = aoSample.length;
+  console.log(`   Checking ${nTotal} cnptSect (of ${aoSect.length} total)`);
+  console.log(`   Model: ${sModel}  (set MCS_MODEL env var to change)\n`);
 
-  for (let i = 0; i < sample.length; i++) {
-    const [sec, fileName] = sample[i];
-    process.stdout.write(`   [${String(i+1).padStart(3)}/${total}] ${sec.sSectTitle.slice(0,45).padEnd(45)} `);
+  for (let i = 0; i < aoSample.length; i++) {
+    const [oSect, sNameFile] = aoSample[i];
+    process.stdout.write(`   [${String(i+1).padStart(3)}/${nTotal}] ${oSect.sNameTitle.slice(0,45).padEnd(45)} `);
 
     try {
-      const drift = await checkSemanticDrift(sec, fileName);
-      const undef = await checkUndefinedTerms(sec, fileName);
-      const alias = await checkMissingAliases(sec, fileName);
+      const oDrift = await fCheckDrift(oSect, sNameFile);
+      const oUndef = await fCheckTermUndefined(oSect, sNameFile);
+      const oAlias = await fCheckAliasMissing(oSect, sNameFile);
 
-      const found = [drift, undef, alias].filter(Boolean);
-      issues.push(...found);
-      console.log(found.length > 0 ? `⚠  ${found.length} issue(s)` : '✓');
+      const aoFound = [oDrift, oUndef, oAlias].filter(Boolean);
+      aoIssue.push(...aoFound);
+      console.log(aoFound.length > 0 ? `⚠  ${aoFound.length} issue(s)` : '✓');
     } catch (e) {
       console.log(`✗ error: ${e.message}`);
       if (e.message.includes('Ollama error')) {
@@ -233,16 +235,16 @@ export async function runAiChecks(files) {
     }
   }
 
-  if (sample.length >= 4) {
+  if (aoSample.length >= 4) {
     console.log('\n   Running near-duplicate check on sample...');
     try {
-      const dupes = await checkNearDuplicates(sample);
-      issues.push(...dupes);
-      console.log(`   Found ${dupes.length} potential duplicates`);
+      const aoDupe = await fCheckDuplicateNear(aoSample);
+      aoIssue.push(...aoDupe);
+      console.log(`   Found ${aoDupe.length} potential duplicates`);
     } catch (e) {
       console.log(`   Skipped: ${e.message}`);
     }
   }
 
-  return issues;
+  return aoIssue;
 }
