@@ -1,1003 +1,179 @@
 {
-  "sGenerated": "2026-09-04T09:57:26.627Z",
+  "sGenerated": "2026-09-04T17:06:15.690Z",
   "oSummary": {
-    "nTotal": 124,
-    "nError": 28,
-    "nWarn": 33,
-    "nInfo": 63
+    "nTotal": 21,
+    "nError": 21,
+    "nWarn": 0,
+    "nInfo": 0
   },
   "aoIssue": [
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 30630,
-      "sMessage": "Duplicate id \"idPA3-19\" — IDs must be unique in a Hitp file"
+      "nLine": 8286,
+      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 30649,
-      "sMessage": "Duplicate id \"idPA3-27\" — IDs must be unique in a Hitp file"
+      "nLine": 9397,
+      "sMessage": "Stray </em> — no matching <em> open"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 30741,
-      "sMessage": "Duplicate id \"idPA3-38\" — IDs must be unique in a Hitp file"
+      "nLine": 9443,
+      "sMessage": "Stray </em> — no matching <em> open"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 30748,
-      "sMessage": "Duplicate id \"idPA3-40\" — IDs must be unique in a Hitp file"
+      "nLine": 9445,
+      "sMessage": "Stray </em> — no matching <em> open"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 32556,
-      "sMessage": "Duplicate id \"idRef-International-Labour-Office-(2003)\" — IDs must be unique in a Hitp file"
+      "nLine": 9798,
+      "sMessage": "Stray </em> — no matching <em> open"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 32616,
-      "sMessage": "Duplicate id \"idRef-Organisation-for-Economic-Co-operation-and-Development-(2009)\" — IDs must be unique in a Hitp file"
+      "nLine": 9911,
+      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 33114,
-      "sMessage": "Duplicate id \"idIndex-adjusted-disposable-income\" — IDs must be unique in a Hitp file"
+      "nLine": 11661,
+      "sMessage": "Stray </em> — no matching <em> open"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 34653,
-      "sMessage": "Duplicate id \"idIndex-currency-and-deposits\" — IDs must be unique in a Hitp file"
+      "nLine": 12157,
+      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 36921,
-      "sMessage": "Duplicate id \"idIndex-households'-actual-social-contributions\" — IDs must be unique in a Hitp file"
+      "nLine": 12467,
+      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 36926,
-      "sMessage": "Duplicate id \"idIndex-households'-social-contribution-supplements\" — IDs must be unique in a Hitp file"
+      "nLine": 12554,
+      "sMessage": "Stray </em> — no matching <em> open"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 37065,
-      "sMessage": "Duplicate id \"idIndex-ILO\" — IDs must be unique in a Hitp file"
+      "nLine": 12595,
+      "sMessage": "Stray </em> — no matching <em> open"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 37198,
-      "sMessage": "Duplicate id \"idIndex-index-linked-securities\" — IDs must be unique in a Hitp file"
+      "nLine": 13186,
+      "sMessage": "Stray </em> — no matching <em> open"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 38050,
-      "sMessage": "Duplicate id \"idIndex-loans-non-performing\" — IDs must be unique in a Hitp file"
+      "nLine": 14266,
+      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 38390,
-      "sMessage": "Duplicate id \"idIndex-mineral-exploration-and-evaluation\" — IDs must be unique in a Hitp file"
+      "nLine": 15723,
+      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 38780,
-      "sMessage": "Duplicate id \"idIndex-non-life-insurance\" — IDs must be unique in a Hitp file"
+      "nLine": 16521,
+      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 39486,
-      "sMessage": "Duplicate id \"idIndex-own-account-production\" — IDs must be unique in a Hitp file"
+      "nLine": 18897,
+      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 40572,
-      "sMessage": "Duplicate id \"idIndex-residence\" — IDs must be unique in a Hitp file"
+      "nLine": 22147,
+      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 42193,
-      "sMessage": "Duplicate id \"idIndex-transport-services\" — IDs must be unique in a Hitp file"
+      "nLine": 22197,
+      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 42477,
-      "sMessage": "Duplicate id \"idIndex-valuation\" — IDs must be unique in a Hitp file"
+      "nLine": 23842,
+      "sMessage": "Stray </em> — no matching <em> open"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H02",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 42697,
-      "sMessage": "Duplicate id \"idIndex-weapons-systems\" — IDs must be unique in a Hitp file"
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3B2",
-      "nLine": 30538,
-      "sMessage": "<p> without id in section \"idA3B2\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3B3",
-      "nLine": 30548,
-      "sMessage": "<p> without id in section \"idA3B3\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3B4",
-      "nLine": 30558,
-      "sMessage": "<p> without id in section \"idA3B4\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3B5",
-      "nLine": 30570,
-      "sMessage": "<p> without id in section \"idA3B5\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3B6",
-      "nLine": 30583,
-      "sMessage": "<p> without id in section \"idA3B6\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3B7",
-      "nLine": 30596,
-      "sMessage": "<p> without id in section \"idA3B7\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3B8",
-      "nLine": 30609,
-      "sMessage": "<p> without id in section \"idA3B8\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3B9",
-      "nLine": 30617,
-      "sMessage": "<p> without id in section \"idA3B9\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3B10",
-      "nLine": 30626,
-      "sMessage": "<p> without id in section \"idA3B10\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3C1",
-      "nLine": 30645,
-      "sMessage": "<p> without id in section \"idA3C1\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3C2",
-      "nLine": 30664,
-      "sMessage": "<p> without id in section \"idA3C2\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3C3",
-      "nLine": 30689,
-      "sMessage": "<p> without id in section \"idA3C3\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3C4",
-      "nLine": 30713,
-      "sMessage": "<p> without id in section \"idA3C4\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3C5",
-      "nLine": 30737,
-      "sMessage": "<p> without id in section \"idA3C5\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3C6",
-      "nLine": 30752,
-      "sMessage": "<p> without id in section \"idA3C6\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D1",
-      "nLine": 30768,
-      "sMessage": "<p> without id in section \"idA3D1\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D2",
-      "nLine": 30788,
-      "sMessage": "<p> without id in section \"idA3D2\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D3",
-      "nLine": 30804,
-      "sMessage": "<p> without id in section \"idA3D3\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D4",
-      "nLine": 30905,
-      "sMessage": "<p> without id in section \"idA3D4\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D5",
-      "nLine": 30922,
-      "sMessage": "<p> without id in section \"idA3D5\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D6",
-      "nLine": 30938,
-      "sMessage": "<p> without id in section \"idA3D6\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D7",
-      "nLine": 30957,
-      "sMessage": "<p> without id in section \"idA3D7\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D8",
-      "nLine": 30967,
-      "sMessage": "<p> without id in section \"idA3D8\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D9",
-      "nLine": 30988,
-      "sMessage": "<p> without id in section \"idA3D9\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D10",
-      "nLine": 31005,
-      "sMessage": "<p> without id in section \"idA3D10\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D11",
-      "nLine": 31018,
-      "sMessage": "<p> without id in section \"idA3D11\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D12",
-      "nLine": 31037,
-      "sMessage": "<p> without id in section \"idA3D12\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D13",
-      "nLine": 31048,
-      "sMessage": "<p> without id in section \"idA3D13\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D14",
-      "nLine": 31058,
-      "sMessage": "<p> without id in section \"idA3D14\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D15",
-      "nLine": 31068,
-      "sMessage": "<p> without id in section \"idA3D15\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D16",
-      "nLine": 31077,
-      "sMessage": "<p> without id in section \"idA3D16\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3D17",
-      "nLine": 31091,
-      "sMessage": "<p> without id in section \"idA3D17\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3E1",
-      "nLine": 31119,
-      "sMessage": "<p> without id in section \"idA3E1\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3E2",
-      "nLine": 31132,
-      "sMessage": "<p> without id in section \"idA3E2\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3E3",
-      "nLine": 31145,
-      "sMessage": "<p> without id in section \"idA3E3\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3E4",
-      "nLine": 31163,
-      "sMessage": "<p> without id in section \"idA3E4\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3E5",
-      "nLine": 31187,
-      "sMessage": "<p> without id in section \"idA3E5\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3E6",
-      "nLine": 31206,
-      "sMessage": "<p> without id in section \"idA3E6\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3E7",
-      "nLine": 31218,
-      "sMessage": "<p> without id in section \"idA3E7\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3E8",
-      "nLine": 31232,
-      "sMessage": "<p> without id in section \"idA3E8\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3E9",
-      "nLine": 31240,
-      "sMessage": "<p> without id in section \"idA3E9\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3E10",
-      "nLine": 31253,
-      "sMessage": "<p> without id in section \"idA3E10\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3E11",
-      "nLine": 31266,
-      "sMessage": "<p> without id in section \"idA3E11\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3E12",
-      "nLine": 31275,
-      "sMessage": "<p> without id in section \"idA3E12\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3E13",
-      "nLine": 31286,
-      "sMessage": "<p> without id in section \"idA3E13\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3E14",
-      "nLine": 31335,
-      "sMessage": "<p> without id in section \"idA3E14\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3E15",
-      "nLine": 31346,
-      "sMessage": "<p> without id in section \"idA3E15\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3F1",
-      "nLine": 31392,
-      "sMessage": "<p> without id in section \"idA3F1\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3F2",
-      "nLine": 31401,
-      "sMessage": "<p> without id in section \"idA3F2\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3F3",
-      "nLine": 31413,
-      "sMessage": "<p> without id in section \"idA3F3\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3F4",
-      "nLine": 31424,
-      "sMessage": "<p> without id in section \"idA3F4\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3F5",
-      "nLine": 31435,
-      "sMessage": "<p> without id in section \"idA3F5\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3F6",
-      "nLine": 31446,
-      "sMessage": "<p> without id in section \"idA3F6\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3F7",
-      "nLine": 31459,
-      "sMessage": "<p> without id in section \"idA3F7\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3F8",
-      "nLine": 31473,
-      "sMessage": "<p> without id in section \"idA3F8\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3F9",
-      "nLine": 31485,
-      "sMessage": "<p> without id in section \"idA3F9\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3G1",
-      "nLine": 31499,
-      "sMessage": "<p> without id in section \"idA3G1\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3G2",
-      "nLine": 31510,
-      "sMessage": "<p> without id in section \"idA3G2\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3G3",
-      "nLine": 31522,
-      "sMessage": "<p> without id in section \"idA3G3\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3G4",
-      "nLine": 31546,
-      "sMessage": "<p> without id in section \"idA3G4\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idTables",
-      "nLine": 32701,
-      "sMessage": "<p> without id in section \"idTables\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idFigures",
-      "nLine": 32880,
-      "sMessage": "<p> without id in section \"idFigures\""
-    },
-    {
-      "sLevel": "INFO",
-      "sCode": "H04",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idToC",
-      "nLine": 42854,
-      "sMessage": "<p> without id in section \"idToC\""
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H06",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idChap17SectPart2SectK",
-      "nLine": 20219,
-      "sMessage": "<p> \"idPara17-196\" clsHide self-anchor points to #idTable17-10 (should be #idPara17-196)"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H06",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idChap29SectB2",
-      "nLine": 28326,
-      "sMessage": "<p> \"idPara29-15\" clsHide self-anchor points to #idPara29-14 (should be #idPara29-15)"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H06",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idChap29SectB2",
-      "nLine": 28348,
-      "sMessage": "<p> \"idPara29-16\" clsHide self-anchor points to #idPara29-14 (should be #idPara29-16)"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H06",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idA3HC4",
-      "nLine": 31584,
-      "sMessage": "<p> \"idA3HC4P1\" has no clsHide self-anchor"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H06",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idIndexF",
-      "nLine": 35982,
-      "sMessage": "<p> \"idIndex-financial-corporation\" clsHide self-anchor points to #idIndex-financial-corporations (should be #idIndex-financial-corporation)"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H06",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idIndexI",
-      "nLine": 37172,
-      "sMessage": "<p> \"idIndex-income-in-kind-received-by-employees\" clsHide self-anchor points to #idIndex-income-measure (should be #idIndex-income-in-kind-received-by-employees)"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H06",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idIndexL",
-      "nLine": 38112,
-      "sMessage": "<p> \"idIndex-LP\" clsHide self-anchor points to #idIndex-Lp (should be #idIndex-LP)"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H06",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idIndexL",
-      "nLine": 38116,
-      "sMessage": "<p> \"idIndex-LQ\" clsHide self-anchor points to #idIndex-Lq (should be #idIndex-LQ)"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H06",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idIndexM",
-      "nLine": 38361,
-      "sMessage": "<p> \"idIndex-MFP\" clsHide self-anchor points to #idIndex-MFP-Multi-factor-productivity (should be #idIndex-MFP)"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H06",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idIndexN",
-      "nLine": 38614,
-      "sMessage": "<p> \"idIndex-nec\" clsHide self-anchor points to #idIndex-n (should be #idIndex-nec)"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H06",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idIndexN",
-      "nLine": 38618,
-      "sMessage": "<p> \"idIndex-nie\" clsHide self-anchor points to #idIndex-n (should be #idIndex-nie)"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H06",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idIndexR",
-      "nLine": 40465,
-      "sMessage": "<p> \"idIndex-real-GDI\" clsHide self-anchor points to #idIndex-real-GDI-Real-gross-domestic-income-(real-GDI) (should be #idIndex-real-GDI)"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H06",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idIndexT",
-      "nLine": 41763,
-      "sMessage": "<p> \"idIndex-tax\" clsHide self-anchor points to #idIndex-taxes (should be #idIndex-tax)"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H06",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idIndexT",
-      "nLine": 42072,
-      "sMessage": "<p> \"idIndex-TP\" clsHide self-anchor points to #idIndex-Tp (should be #idIndex-TP)"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H06",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": "idIndexT",
-      "nLine": 42076,
-      "sMessage": "<p> \"idIndex-TQ\" clsHide self-anchor points to #idIndex-Tq (should be #idIndex-TQ)"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 7850,
-      "sMessage": "Broken anchor: #idParagraphA6-10 not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 18006,
-      "sMessage": "Broken anchor: #idEquation20 not found in \"HitpStnStd000.last.html\""
+      "nLine": 23949,
+      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
     },
     {
       "sLevel": "ERROR",
-      "sCode": "H08",
+      "sCode": "H09",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 20191,
-      "sMessage": "Broken link: FILE not found \"HitpStnStd000.files/SNA2008-imgTable13.8.png\" (from \"HitpStnStd000.last.html/HitpStnStd000.files/SNA2008-imgTable13.8.png\")"
-    },
-    {
-      "sLevel": "ERROR",
-      "sCode": "H08",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 20503,
-      "sMessage": "Broken link: FILE not found \"HitpStnStd000.files/SNA2008-imgFigure17.3.png\" (from \"HitpStnStd000.last.html/HitpStnStd000.files/SNA2008-imgFigure17.3.png\")"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 26331,
-      "sMessage": "Broken anchor: #SNA2008-imgFigure25.4.png not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "ERROR",
-      "sCode": "H08",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 26368,
-      "sMessage": "Broken link: FILE not found \"HitpStnStd000.files/SNA2008-imgTable25.4.png\" (from \"HitpStnStd000.last.html/HitpStnStd000.files/SNA2008-imgTable25.4.png\")"
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 27700,
-      "sMessage": "Broken anchor: #idParagraph14-77 not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 33539,
-      "sMessage": "Broken anchor: #idIndex-insurance-claim not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 33620,
-      "sMessage": "Broken anchor: #idIndex-Production-boundary not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 33620,
-      "sMessage": "Broken anchor: #idIndex-Asset-boundary not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 35046,
-      "sMessage": "Broken anchor: #idIndex-natural-disasters not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 35709,
-      "sMessage": "Broken anchor: #idIndex-adjusted-claim not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 36527,
-      "sMessage": "Broken anchor: #idIndex-purchased not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 37051,
-      "sMessage": "Broken anchor: #idF21-60 not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 35991,
-      "sMessage": "Broken anchor: #idIndex-financial-corporations not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 38058,
-      "sMessage": "Broken anchor: #idIndex-non-performing-loans not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 38181,
-      "sMessage": "Broken anchor: #idIndex-trade-margins not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 38182,
-      "sMessage": "Broken anchor: #idIndex-transport-margins not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 39980,
-      "sMessage": "Broken anchor: #idIndex-producer's-prices not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 39985,
-      "sMessage": "Broken anchor: #idIndex-purchaser's-prices not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "WARN",
-      "sCode": "H07",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 40295,
-      "sMessage": "Broken anchor: #idIndex-goodwill-and-marketing-assets not found in \"HitpStnStd000.last.html\""
-    },
-    {
-      "sLevel": "ERROR",
-      "sCode": "H08",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 42952,
-      "sMessage": "Broken link: FILE not found \"../../../standard/economy/un.sna.2008.8.2021-04-24.html\" (from \"HitpStnStd000.last.html/../../../standard/economy/un.sna.2008.8.2021-04-24.html\")"
-    },
-    {
-      "sLevel": "ERROR",
-      "sCode": "H08",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 42953,
-      "sMessage": "Broken link: FILE not found \"../../../standard/economy/un.sna.2008.7.2020-11-04.html\" (from \"HitpStnStd000.last.html/../../../standard/economy/un.sna.2008.7.2020-11-04.html\")"
-    },
-    {
-      "sLevel": "ERROR",
-      "sCode": "H08",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 42954,
-      "sMessage": "Broken link: FILE not found \"../../../standard/economy/un.sna.2008.6.2017-06-26.html\" (from \"HitpStnStd000.last.html/../../../standard/economy/un.sna.2008.6.2017-06-26.html\")"
-    },
-    {
-      "sLevel": "ERROR",
-      "sCode": "H08",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 42955,
-      "sMessage": "Broken link: FILE not found \"../../../standard/economy/un.sna.2008.2015.12.03.5.html\" (from \"HitpStnStd000.last.html/../../../standard/economy/un.sna.2008.2015.12.03.5.html\")"
-    },
-    {
-      "sLevel": "ERROR",
-      "sCode": "H08",
-      "sNameFile": "HitpStnStd000.last.html",
-      "sConcept": null,
-      "nLine": 42956,
-      "sMessage": "Broken link: FILE not found \"../../../standard/economy/un.sna.2008.2013.06.01.html\" (from \"HitpStnStd000.last.html/../../../standard/economy/un.sna.2008.2013.06.01.html\")"
+      "nLine": 27126,
+      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
     }
   ]
 }

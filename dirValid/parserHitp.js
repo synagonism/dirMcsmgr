@@ -70,6 +70,64 @@ function fFindIdDuplicate(sHtmlIn) {
   return aoIdDup;
 }
 
+// void elements never need a closing tag
+const oSetTagVoid = new Set(['br', 'img', 'meta', 'link', 'hr', 'input', 'wbr',
+  'col', 'source', 'area', 'base', 'embed', 'param', 'track']);
+// tags whose end tag is optional in HTML — skip to avoid false "unclosed"
+const oSetTagSkip = new Set(['li', 'tr', 'td', 'th']);
+
+/**
+ * DOING: stack-match every container tag and find unclosed opens / stray closes.
+ *   <script>/<style>/<!-- --> regions are BLANKED (chars → spaces, newlines kept)
+ *   first, so their contents cannot look like tags and line numbers stay exact.
+ * OUTPUT: [{ sKind:'unclosed'|'stray', sTag, nLine }]
+ *   unclosed → line where the tag was OPENED; stray → line of the extra close.
+ */
+function fScanTagPairs(sHtmlIn) {
+  const fBlank = sBlock => sBlock.replace(/[^\n]/g, ' ');
+  const sScan = sHtmlIn
+    .replace(/<script[\s\S]*?<\/script>/gi, fBlank)
+    .replace(/<style[\s\S]*?<\/style>/gi, fBlank)
+    .replace(/<!--[\s\S]*?-->/g, fBlank);
+
+  const aoBad = [];
+  const aoStack = []; // { sTag, nLine }
+  const rTag = /<(\/?)([a-zA-Z][a-zA-Z0-9]*)\b([^>]*)>/g;
+  let aMatch, nLine = 1, nPos = 0;
+  while ((aMatch = rTag.exec(sScan)) !== null) {
+    while (nPos < aMatch.index) { if (sScan.charCodeAt(nPos) === 10) nLine++; nPos++; }
+    const bClose = aMatch[1] === '/';
+    const sTag = aMatch[2].toLowerCase();
+    const sAtts = aMatch[3];
+    if (oSetTagVoid.has(sTag) || oSetTagSkip.has(sTag)) continue;
+    if (!bClose && /\/\s*$/.test(sAtts)) continue; // self-closing <tag/>
+
+    if (!bClose) {
+      aoStack.push({ sTag, nLine });
+    } else {
+      // find nearest matching open from the top of the stack
+      let nIdx = -1;
+      for (let k = aoStack.length - 1; k >= 0; k--) {
+        if (aoStack[k].sTag === sTag) { nIdx = k; break; }
+      }
+      if (nIdx === -1) {
+        aoBad.push({ sKind: 'stray', sTag, nLine });
+      } else {
+        // everything above the match was left unclosed
+        for (let k = aoStack.length - 1; k > nIdx; k--) {
+          aoBad.push({ sKind: 'unclosed', sTag: aoStack[k].sTag, nLine: aoStack[k].nLine });
+        }
+        aoStack.length = nIdx; // pop through the match
+      }
+    }
+  }
+  // anything still open at EOF is unclosed
+  for (const oOpen of aoStack) {
+    aoBad.push({ sKind: 'unclosed', sTag: oOpen.sTag, nLine: oOpen.nLine });
+  }
+  return aoBad;
+}
+
 /**
  * DOING: read one heading/paragraph element's HTML.
  * OUTPUT: { sNameId, sHrefSelf }
@@ -111,12 +169,14 @@ export function fParseFileHitp(sPathFile) {
       aLinks: [],
       oMapIdLine: new Map(),
       oMapLinkLine: new Map(),
+      aoTagBad: [],
     };
   }
 
-  // ── line maps + id set + duplicate ids ────────────────────────────────────
+  // ── line maps + id set + duplicate ids + tag pairs ────────────────────────
   const oMapIdLine   = fBuildMapLine(sFileRaw, /\bid="([^"]+)"/g);
   const oMapLinkLine = fBuildMapLine(sFileRaw, /href="([^"]+)"/g);
+  const aoTagBad = fScanTagPairs(sFileRaw);
   const oSetId  = fExtractId(sFileRaw);
   const aoIdDup = fFindIdDuplicate(sFileRaw);
 
@@ -195,6 +255,7 @@ export function fParseFileHitp(sPathFile) {
     aLinks,
     oMapIdLine,
     oMapLinkLine,
+    aoTagBad,
   };
 }
 

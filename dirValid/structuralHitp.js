@@ -17,6 +17,7 @@
  *  H06  clsHide self-anchor missing or not matching the element's own id
  *  H07  Broken internal anchor: #id (or file#id) target not found
  *  H08  Broken file link: target .last.html does not exist
+ *  H09  Missing HTML tag pair: unclosed open, or stray close
  */
 
 import path from 'path';
@@ -196,6 +197,20 @@ function fCheckLink(aoFile, sPathDir) {
   return aoIssue;
 }
 
+// ❌ H09  missing HTML tag pair (unclosed open or stray close)
+function fCheckTagPair(aoFile) {
+  const aoIssue = [];
+  for (const oFile of aoFile) {
+    for (const oBad of oFile.aoTagBad) {
+      const sMessage = oBad.sKind === 'stray'
+        ? `Stray </${oBad.sTag}> — no matching <${oBad.sTag}> open`
+        : `Unclosed <${oBad.sTag}> — no matching </${oBad.sTag}> (opened here)`;
+      aoIssue.push(fIssue('ERROR', 'H09', oFile.sNameFile, null, sMessage, oBad.nLine));
+    }
+  }
+  return aoIssue;
+}
+
 // ─── main export ──────────────────────────────────────────────────────────────
 
 export function fRunChecksHitp(aoFile, sPathDir) {
@@ -225,6 +240,11 @@ export function fRunChecksHitp(aoFile, sPathDir) {
   const aoLink = fCheckLink(aoFile, sPathDir);
   aoAll.push(...aoLink);
   console.log(`${aoLink.length} issues`);
+
+  process.stdout.write('   H09    Tag pairs... ');
+  const aoTag = fCheckTagPair(aoFile);
+  aoAll.push(...aoTag);
+  console.log(`${aoTag.length} issues`);
 
   return aoAll;
 }
