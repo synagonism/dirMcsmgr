@@ -154,6 +154,39 @@ function fScanTagCase(sHtmlIn) {
 }
 
 /**
+ * DOING: find element attributes whose value is NOT double-quoted (single-quoted
+ *   or unquoted). Attribute lists are parsed per start-tag with the double-quoted
+ *   alternative FIRST, so an "=" inside a "…" value (e.g. the viewport meta's
+ *   content="…, initial-scale=1") is consumed whole and never mistaken for an attr.
+ * OUTPUT: [{ sAttr, sKind:'single'|'unquoted', sValue, nLine }]
+ */
+function fScanAttrQuote(sHtmlIn) {
+  const sScan = fBlankNonHtml(sHtmlIn);
+  const aoAttrBad = [];
+  const rTag = /<([a-zA-Z][a-zA-Z0-9]*)\b([^>]*)>/g; // start/void tags only
+  const rAttr = /([a-zA-Z_:][-a-zA-Z0-9_:.]*)\s*=\s*("[^"]*"|'[^']*'|[^\s"'=<>`]+)/g;
+  let aMatch, nLine = 1, nPos = 0;
+  while ((aMatch = rTag.exec(sScan)) !== null) {
+    while (nPos < aMatch.index) { if (sScan.charCodeAt(nPos) === 10) nLine++; nPos++; }
+    const sAtts = aMatch[2];
+    let aAttrMatch;
+    rAttr.lastIndex = 0;
+    while ((aAttrMatch = rAttr.exec(sAtts)) !== null) {
+      const sAttr = aAttrMatch[1];
+      const sRaw = aAttrMatch[2];
+      const sFirst = sRaw[0];
+      if (sFirst === '"') continue; // double-quoted → OK
+      if (sFirst === "'") {
+        aoAttrBad.push({ sAttr, sKind: 'single', sValue: sRaw.slice(1, -1), nLine });
+      } else {
+        aoAttrBad.push({ sAttr, sKind: 'unquoted', sValue: sRaw, nLine });
+      }
+    }
+  }
+  return aoAttrBad;
+}
+
+/**
  * DOING: read one heading/paragraph element's HTML.
  * OUTPUT: { sNameId, sHrefSelf }
  *   sNameId   — value of the element's own id= (or null)
@@ -196,6 +229,7 @@ export function fParseFileHitp(sPathFile) {
       oMapLinkLine: new Map(),
       aoTagBad: [],
       aoTagCase: [],
+      aoAttrBad: [],
     };
   }
 
@@ -204,6 +238,7 @@ export function fParseFileHitp(sPathFile) {
   const oMapLinkLine = fBuildMapLine(sFileRaw, /href="([^"]+)"/g);
   const aoTagBad = fScanTagPairs(sFileRaw);
   const aoTagCase = fScanTagCase(sFileRaw);
+  const aoAttrBad = fScanAttrQuote(sFileRaw);
   const oSetId  = fExtractId(sFileRaw);
   const aoIdDup = fFindIdDuplicate(sFileRaw);
 
@@ -284,6 +319,7 @@ export function fParseFileHitp(sPathFile) {
     oMapLinkLine,
     aoTagBad,
     aoTagCase,
+    aoAttrBad,
   };
 }
 

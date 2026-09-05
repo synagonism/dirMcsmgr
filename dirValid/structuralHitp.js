@@ -19,6 +19,7 @@
  *  H08  Broken file link: target .last.html does not exist
  *  H09  Missing HTML tag pair: unclosed open, or stray close
  *  H10  HTML element name is not lowercase
+ *  H11  Attribute value not double-quoted (single-quoted or unquoted)
  */
 
 import path from 'path';
@@ -225,6 +226,20 @@ function fCheckTagCase(aoFile) {
   return aoIssue;
 }
 
+// ⚠️ H11  attribute value not double-quoted (single-quoted or unquoted)
+function fCheckAttrQuote(aoFile) {
+  const aoIssue = [];
+  for (const oFile of aoFile) {
+    for (const oAttr of oFile.aoAttrBad) {
+      const sMessage = oAttr.sKind === 'single'
+        ? `Attribute ${oAttr.sAttr}='${oAttr.sValue}' uses single quotes — use ${oAttr.sAttr}="${oAttr.sValue}"`
+        : `Attribute ${oAttr.sAttr}=${oAttr.sValue} is unquoted — use ${oAttr.sAttr}="${oAttr.sValue}"`;
+      aoIssue.push(fIssue('WARN', 'H11', oFile.sNameFile, null, sMessage, oAttr.nLine));
+    }
+  }
+  return aoIssue;
+}
+
 // ─── main export ──────────────────────────────────────────────────────────────
 
 export function fRunChecksHitp(aoFile, sPathDir) {
@@ -264,6 +279,11 @@ export function fRunChecksHitp(aoFile, sPathDir) {
   const aoTagCase = fCheckTagCase(aoFile);
   aoAll.push(...aoTagCase);
   console.log(`${aoTagCase.length} issues`);
+
+  process.stdout.write('   H11    Attr double-quote... ');
+  const aoAttr = fCheckAttrQuote(aoFile);
+  aoAll.push(...aoAttr);
+  console.log(`${aoAttr.length} issues`);
 
   return aoAll;
 }
