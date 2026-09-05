@@ -1,179 +1,379 @@
 {
-  "sGenerated": "2026-09-04T17:06:15.690Z",
+  "sGenerated": "2026-09-05T05:32:39.626Z",
   "oSummary": {
-    "nTotal": 21,
-    "nError": 21,
-    "nWarn": 0,
+    "nTotal": 46,
+    "nError": 0,
+    "nWarn": 46,
     "nInfo": 0
   },
   "aoIssue": [
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 8286,
-      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
+      "nLine": 18022,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 9397,
-      "sMessage": "Stray </em> — no matching <em> open"
+      "nLine": 18022,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 9443,
-      "sMessage": "Stray </em> — no matching <em> open"
+      "nLine": 20721,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 9445,
-      "sMessage": "Stray </em> — no matching <em> open"
+      "nLine": 20721,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 9798,
-      "sMessage": "Stray </em> — no matching <em> open"
+      "nLine": 20723,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 9911,
-      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
+      "nLine": 20723,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 11661,
-      "sMessage": "Stray </em> — no matching <em> open"
+      "nLine": 20724,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 12157,
-      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
+      "nLine": 20724,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 12467,
-      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
+      "nLine": 22980,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 12554,
-      "sMessage": "Stray </em> — no matching <em> open"
+      "nLine": 22980,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 12595,
-      "sMessage": "Stray </em> — no matching <em> open"
+      "nLine": 22980,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 13186,
-      "sMessage": "Stray </em> — no matching <em> open"
+      "nLine": 22980,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 14266,
-      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
+      "nLine": 22980,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 15723,
-      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
+      "nLine": 22980,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 16521,
-      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
+      "nLine": 22980,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 18897,
-      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
+      "nLine": 22980,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 22147,
-      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
+      "nLine": 22980,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 22197,
-      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
+      "nLine": 22980,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 23842,
-      "sMessage": "Stray </em> — no matching <em> open"
+      "nLine": 22986,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 23949,
-      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
+      "nLine": 22986,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     },
     {
-      "sLevel": "ERROR",
-      "sCode": "H09",
+      "sLevel": "WARN",
+      "sCode": "H10",
       "sNameFile": "HitpStnStd000.last.html",
       "sConcept": null,
-      "nLine": 27126,
-      "sMessage": "Unclosed <p> — no matching </p> (opened here)"
+      "nLine": 22986,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 22986,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 22986,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 22986,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 22986,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 22986,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 22986,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 22986,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 22990,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 22990,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 27869,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 27869,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 27871,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 27871,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 27882,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 27882,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 27882,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 27882,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 27882,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 27882,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 27882,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 27882,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 27882,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 27882,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 27882,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H10",
+      "sNameFile": "HitpStnStd000.last.html",
+      "sConcept": null,
+      "nLine": 27882,
+      "sMessage": "HTML element <Sup> is not lowercase — use <sup>"
     }
   ]
 }

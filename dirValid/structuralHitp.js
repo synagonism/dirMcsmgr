@@ -18,6 +18,7 @@
  *  H07  Broken internal anchor: #id (or file#id) target not found
  *  H08  Broken file link: target .last.html does not exist
  *  H09  Missing HTML tag pair: unclosed open, or stray close
+ *  H10  HTML element name is not lowercase
  */
 
 import path from 'path';
@@ -211,6 +212,19 @@ function fCheckTagPair(aoFile) {
   return aoIssue;
 }
 
+// ⚠️ H10  HTML element name is not lowercase
+function fCheckTagCase(aoFile) {
+  const aoIssue = [];
+  for (const oFile of aoFile) {
+    for (const oCase of oFile.aoTagCase) {
+      aoIssue.push(fIssue('WARN', 'H10', oFile.sNameFile, null,
+        `HTML element <${oCase.sTag}> is not lowercase — use <${oCase.sTag.toLowerCase()}>`,
+        oCase.nLine));
+    }
+  }
+  return aoIssue;
+}
+
 // ─── main export ──────────────────────────────────────────────────────────────
 
 export function fRunChecksHitp(aoFile, sPathDir) {
@@ -245,6 +259,11 @@ export function fRunChecksHitp(aoFile, sPathDir) {
   const aoTag = fCheckTagPair(aoFile);
   aoAll.push(...aoTag);
   console.log(`${aoTag.length} issues`);
+
+  process.stdout.write('   H10    Tag lowercase... ');
+  const aoTagCase = fCheckTagCase(aoFile);
+  aoAll.push(...aoTagCase);
+  console.log(`${aoTagCase.length} issues`);
 
   return aoAll;
 }

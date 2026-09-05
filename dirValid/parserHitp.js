@@ -77,18 +77,25 @@ const oSetTagVoid = new Set(['br', 'img', 'meta', 'link', 'hr', 'input', 'wbr',
 const oSetTagSkip = new Set(['li', 'tr', 'td', 'th']);
 
 /**
+ * DOING: blank out <script>/<style>/<!-- --> regions (chars → spaces, newlines
+ *   kept), so their contents cannot look like tags and line numbers stay exact.
+ * OUTPUT: the same-length string, scannable for real HTML tags.
+ */
+function fBlankNonHtml(sHtmlIn) {
+  const fBlank = sBlock => sBlock.replace(/[^\n]/g, ' ');
+  return sHtmlIn
+    .replace(/<script[\s\S]*?<\/script>/gi, fBlank)
+    .replace(/<style[\s\S]*?<\/style>/gi, fBlank)
+    .replace(/<!--[\s\S]*?-->/g, fBlank);
+}
+
+/**
  * DOING: stack-match every container tag and find unclosed opens / stray closes.
- *   <script>/<style>/<!-- --> regions are BLANKED (chars → spaces, newlines kept)
- *   first, so their contents cannot look like tags and line numbers stay exact.
  * OUTPUT: [{ sKind:'unclosed'|'stray', sTag, nLine }]
  *   unclosed → line where the tag was OPENED; stray → line of the extra close.
  */
 function fScanTagPairs(sHtmlIn) {
-  const fBlank = sBlock => sBlock.replace(/[^\n]/g, ' ');
-  const sScan = sHtmlIn
-    .replace(/<script[\s\S]*?<\/script>/gi, fBlank)
-    .replace(/<style[\s\S]*?<\/style>/gi, fBlank)
-    .replace(/<!--[\s\S]*?-->/g, fBlank);
+  const sScan = fBlankNonHtml(sHtmlIn);
 
   const aoBad = [];
   const aoStack = []; // { sTag, nLine }
@@ -126,6 +133,24 @@ function fScanTagPairs(sHtmlIn) {
     aoBad.push({ sKind: 'unclosed', sTag: oOpen.sTag, nLine: oOpen.nLine });
   }
   return aoBad;
+}
+
+/**
+ * DOING: find every HTML element name that contains an uppercase letter.
+ *   HTML element names must be lowercase in Hitp.
+ * OUTPUT: [{ sTag, nLine }] — sTag keeps the original (offending) casing.
+ */
+function fScanTagCase(sHtmlIn) {
+  const sScan = fBlankNonHtml(sHtmlIn);
+  const aoCase = [];
+  const rTag = /<\/?([a-zA-Z][a-zA-Z0-9]*)/g;
+  let aMatch, nLine = 1, nPos = 0;
+  while ((aMatch = rTag.exec(sScan)) !== null) {
+    while (nPos < aMatch.index) { if (sScan.charCodeAt(nPos) === 10) nLine++; nPos++; }
+    const sTag = aMatch[1];
+    if (sTag !== sTag.toLowerCase()) aoCase.push({ sTag, nLine });
+  }
+  return aoCase;
 }
 
 /**
@@ -170,6 +195,7 @@ export function fParseFileHitp(sPathFile) {
       oMapIdLine: new Map(),
       oMapLinkLine: new Map(),
       aoTagBad: [],
+      aoTagCase: [],
     };
   }
 
@@ -177,6 +203,7 @@ export function fParseFileHitp(sPathFile) {
   const oMapIdLine   = fBuildMapLine(sFileRaw, /\bid="([^"]+)"/g);
   const oMapLinkLine = fBuildMapLine(sFileRaw, /href="([^"]+)"/g);
   const aoTagBad = fScanTagPairs(sFileRaw);
+  const aoTagCase = fScanTagCase(sFileRaw);
   const oSetId  = fExtractId(sFileRaw);
   const aoIdDup = fFindIdDuplicate(sFileRaw);
 
@@ -256,6 +283,7 @@ export function fParseFileHitp(sPathFile) {
     oMapIdLine,
     oMapLinkLine,
     aoTagBad,
+    aoTagCase,
   };
 }
 
