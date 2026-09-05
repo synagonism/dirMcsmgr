@@ -187,6 +187,33 @@ function fScanAttrQuote(sHtmlIn) {
 }
 
 /**
+ * DOING: find char-ranges of a-string that are inside a <div> carrying an id=
+ *   (a no-id <div> nested inside a <div id> still counts — an ancestor has the id).
+ * OUTPUT: [{ nStart, nEnd }] ranges (in sHtmlIn coordinates).
+ */
+function fRangesInDivId(sHtmlIn) {
+  const aoRange = [];
+  const rDiv = /<\/?div\b([^>]*)>/gi;
+  const aoStack = []; // { bHasId } per open <div>
+  let nDepthId = 0, nStart = -1, aMatch;
+  while ((aMatch = rDiv.exec(sHtmlIn)) !== null) {
+    const bClose = aMatch[0].startsWith('</');
+    if (!bClose) {
+      const bHasId = /\bid="[^"]*"/.test(aMatch[1]);
+      aoStack.push({ bHasId });
+      if (bHasId) { if (nDepthId === 0) nStart = aMatch.index; nDepthId++; }
+    } else {
+      const oOpen = aoStack.pop();
+      if (oOpen && oOpen.bHasId) {
+        nDepthId--;
+        if (nDepthId === 0) { aoRange.push({ nStart, nEnd: aMatch.index + aMatch[0].length }); nStart = -1; }
+      }
+    }
+  }
+  return aoRange;
+}
+
+/**
  * DOING: read one heading/paragraph element's HTML.
  * OUTPUT: { sNameId, sHrefSelf }
  *   sNameId   — value of the element's own id= (or null)
@@ -258,6 +285,13 @@ export function fParseFileHitp(sPathFile) {
   const aoSect = [];
   const aoElmt = [];
 
+  // Lines of <p> that are unclosed (from the tag-pair scanner). An unclosed <p>
+  // makes the element regex swallow the NEXT paragraph, so its sHrefSelf is bogus;
+  // mark it so H06 skips it (H09 reports the unclosed tag instead).
+  const oSetLineUnclosedP = new Set(
+    aoTagBad.filter(oBad => oBad.sTag === 'p' && oBad.sKind === 'unclosed').map(oBad => oBad.nLine)
+  );
+
   for (const oRawSect of aoRawSect) {
     const sOverview = fFindSect_overview(oRawSect.sRawHtml);
 
@@ -279,6 +313,8 @@ export function fParseFileHitp(sPathFile) {
     if (aoIdSectInfra.includes(oRawSect.sNameId)) continue;
 
     const sIdSect = oRawSect.sNameId;
+    // char-ranges inside a <div id="…"> — <p> there is exempt from H04
+    const aoRangeDivId = fRangesInDivId(sOverview);
 
     // headings (h1..6) directly in this section's overview
     const rHead = /<h([1-6])\b[^>]*>[\s\S]*?<\/h\1>/gi;
@@ -295,9 +331,11 @@ export function fParseFileHitp(sPathFile) {
     const rP = /<p\b[^>]*>[\s\S]*?<\/p>/gi;
     while ((aMatch = rP.exec(sOverview)) !== null) {
       const { sNameId, sHrefSelf } = fReadElmtHitp(aMatch[0]);
+      const nLine = oMapIdLine.get(sNameId) ?? oMapIdLine.get(sIdSect) ?? null;
+      const bInDivId = aoRangeDivId.some(oR => aMatch.index >= oR.nStart && aMatch.index < oR.nEnd);
       aoElmt.push({
         sType: 'para', sSubtype: 'p', sNameId, nLevel: null,
-        sHrefSelf, nLine: oMapIdLine.get(sNameId) ?? oMapIdLine.get(sIdSect) ?? null, sIdSect,
+        sHrefSelf, nLine, sIdSect, bUnclosed: oSetLineUnclosedP.has(nLine), bInDivId,
       });
     }
   }

@@ -122,7 +122,7 @@ function fCheckIdMissing(aoFile) {
         aoIssue.push(fIssue('ERROR', 'H03', oFile.sNameFile, fSectOf(oElmt),
           `<${oElmt.sSubtype}> heading without id in section "${oElmt.sIdSect}" — cannot be a link/preview target`,
           oFile.oMapIdLine.get(oElmt.sIdSect) ?? null));
-      } else {
+      } else if (!oElmt.bInDivId) { // <p> inside a <div id="…"> is exempt — the div carries the id
         aoIssue.push(fIssue('INFO', 'H04', oFile.sNameFile, fSectOf(oElmt),
           `<p> without id in section "${oElmt.sIdSect}"`,
           oFile.oMapIdLine.get(oElmt.sIdSect) ?? null));
@@ -141,6 +141,7 @@ function fCheckSelfAnchor(aoFile) {
     for (const oElmt of oFile.aoElmt) {
       if (oElmt.sType === 'head') continue; // headings need no self-anchor (TOC)
       if (!oElmt.sNameId) continue; // no id → already H03/H04
+      if (oElmt.bUnclosed) continue; // unclosed <p> → reported by H09, not a mismatch
       if (oElmt.sHrefSelf === null) {
         aoIssue.push(fIssue('WARN', 'H06', oFile.sNameFile, fSectOf(oElmt),
           `<${oElmt.sSubtype}> "${oElmt.sNameId}" has no clsHide self-anchor`,

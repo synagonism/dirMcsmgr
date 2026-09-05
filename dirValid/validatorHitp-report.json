@@ -1,19 +1,107 @@
 {
-  "sGenerated": "2026-09-05T05:40:25.928Z",
+  "sGenerated": "2026-09-05T07:23:29.965Z",
   "oSummary": {
-    "nTotal": 1,
+    "nTotal": 12,
     "nError": 0,
-    "nWarn": 1,
+    "nWarn": 12,
     "nInfo": 0
   },
   "aoIssue": [
     {
       "sLevel": "WARN",
-      "sCode": "H11",
-      "sNameFile": "HitpStnStd000.last.html",
+      "sCode": "H07",
+      "sNameFile": "HitpStnEcon000.last.html",
       "sConcept": null,
-      "nLine": 12892,
-      "sMessage": "Attribute class='clsPreview' uses single quotes — use class=\"clsPreview\""
+      "nLine": 7601,
+      "sMessage": "Broken anchor: #idNote23S28dep not found in \"HitpStnEcon000.last.html\""
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H07",
+      "sNameFile": "HitpStnEcon000.last.html",
+      "sConcept": null,
+      "nLine": 7808,
+      "sMessage": "Broken anchor: #idCmlProduction not found in \"HitpStnEcon000.last.html\""
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H07",
+      "sNameFile": "HitpStnEcon000.last.html",
+      "sConcept": null,
+      "nLine": 8043,
+      "sMessage": "Broken anchor: #idCptEntrepreneurs not found in \"HitpStnEcon000.last.html\""
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H07",
+      "sNameFile": "HitpStnEcon000.last.html",
+      "sConcept": null,
+      "nLine": 8044,
+      "sMessage": "Broken anchor: #idCptEntrepreneursNo not found in \"HitpStnEcon000.last.html\""
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H07",
+      "sNameFile": "HitpStnEcon000.last.html",
+      "sConcept": null,
+      "nLine": 8062,
+      "sMessage": "Broken anchor: #idCptconomy not found in \"HitpStnEcon000.last.html\""
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H07",
+      "sNameFile": "HitpStnEcon000.last.html",
+      "sConcept": null,
+      "nLine": 8185,
+      "sMessage": "Broken anchor: #idCptwageunit not found in \"HitpStnEcon000.last.html\""
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H07",
+      "sNameFile": "HitpStnEcon000.last.html",
+      "sConcept": null,
+      "nLine": 8220,
+      "sMessage": "Broken anchor: #id18SectIIIPara12 not found in \"HitpStnEcon000.last.html\""
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H07",
+      "sNameFile": "HitpStnEcon000.last.html",
+      "sConcept": null,
+      "nLine": 8546,
+      "sMessage": "Broken anchor: #idCptIndustry not found in \"HitpStnEcon000.last.html\""
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H07",
+      "sNameFile": "HitpStnEcon000.last.html",
+      "sConcept": null,
+      "nLine": 10014,
+      "sMessage": "Broken anchor: #IdChap19SectIPara1 not found in \"HitpStnEcon000.last.html\""
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H07",
+      "sNameFile": "HitpStnEcon000.last.html",
+      "sConcept": null,
+      "nLine": 10023,
+      "sMessage": "Broken anchor: #idCptRageSreal not found in \"HitpStnEcon000.last.html\""
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H07",
+      "sNameFile": "HitpStnEcon000.last.html",
+      "sConcept": null,
+      "nLine": 10253,
+      "sMessage": "Broken anchor: #idChap23SectIIPara3 not found in \"HitpStnEcon000.last.html\""
+    },
+    {
+      "sLevel": "WARN",
+      "sCode": "H07",
+      "sNameFile": "HitpStnEcon000.last.html",
+      "sConcept": null,
+      "nLine": 10820,
+      "sMessage": "Broken anchor: #idChapter21 not found in \"HitpStnEcon000.last.html\""
     }
   ]
 }
