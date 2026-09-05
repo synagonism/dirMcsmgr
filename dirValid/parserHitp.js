@@ -262,7 +262,7 @@ export function fParseFileHitp(sPathFile) {
 
   // ── line maps + id set + duplicate ids + tag pairs ────────────────────────
   const oMapIdLine   = fBuildMapLine(sFileRaw, /\bid="([^"]+)"/g);
-  const oMapLinkLine = fBuildMapLine(sFileRaw, /href="([^"]+)"/g);
+  const oMapLinkLine = fBuildMapLine(sFileRaw, /<a\b[^>]*?\bhref="([^"]+)"/g);
   const aoTagBad = fScanTagPairs(sFileRaw);
   const aoTagCase = fScanTagCase(sFileRaw);
   const aoAttrBad = fScanAttrQuote(sFileRaw);

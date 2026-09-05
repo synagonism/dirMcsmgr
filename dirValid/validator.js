@@ -1,16 +1,22 @@
 #!/usr/bin/env node
 /**
- * Mcs Consistency Checker
+ * Mcs/Hitp Consistency Checker
  * Checks dirMcsh-worldview for structural and content issues.
- * Uses the DeepSeek Cloud API for deep semantic checks when --ai flag is used.
+ *
+ * Every file is validated as generic Hitp (H01–H11). Files whose name starts with
+ * "Mcs" additionally get the Mcs concept checks (M01–M12) and, with --ai, the
+ * DeepSeek semantic checks (A01–A04). The Hitp-covered checks (version, links,
+ * anchors) are NOT repeated in the Mcs layer.
  *
  * Usage:
  *   node validator.js <dirMcsh-path>          # fast structural checks only
- *   node validator.js <dirMcsh-path> --ai     # + DeepSeek AI semantic checks
+ *   node validator.js <dirMcsh-path> --ai     # + DeepSeek AI semantic checks (Mcs)
  *   node validator.js <dirMcsh-path> --file McsXxx000001.last.html  # single file
  */
 
-import { fParseFile, fParseFileAll } from './parser.js';
+import { fParseFileHitp, fParseFileAllHitp } from './parserHitp.js';
+import { fRunChecksHitp } from './structuralHitp.js';
+import { fParseFile } from './parser.js';
 import { fRunChecksStructural } from './structural.js';
 import { fRunChecksAi } from './ai-checks.js';
 import { fReporter } from './reporter.js';
@@ -19,6 +25,7 @@ import fs from 'fs';
 
 const
   aVersion = [
+    'validator.js.0-4-0.2026-09-05: merge Hitp+Mcs',
     'validator.js.0-3-0.2026-09-04: naming convention',
     'validator.js.0-2-0.2026-04-27: working structural',
     'validator.js.0-1-0.2026-04-24: creation'
@@ -32,7 +39,6 @@ if (aArg.length === 0) {
 
 const sPathDir     = aArg[0];
 const bUseAi       = aArg.includes('--ai');
-const bSaveReport  = true; // aArg.includes('--report');
 const nIndexFile   = aArg.indexOf('--file');
 const sFileSingle  = nIndexFile !== -1 ? aArg[nIndexFile + 1] : null;
 
@@ -45,38 +51,40 @@ const oReporter = fReporter();
 
 async function fMain() {
   console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-  console.log('  Mcs Consistency Checker');
+  console.log('  Mcs/Hitp Consistency Checker');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
-  let aoFile;
+  // ── parse every file as generic Hitp ──────────────────────────────────────
+  let aoFileHitp;
   if (sFileSingle) {
     const sPathFile = path.isAbsolute(sFileSingle) ? sFileSingle : path.join(sPathDir, sFileSingle);
     console.log(`📄 Single-file mode: ${sFileSingle}`);
-    aoFile = [fParseFile(sPathFile)];
+    aoFileHitp = [fParseFileHitp(sPathFile)];
   } else {
     console.log(`📂 Scanning: ${sPathDir}`);
-    aoFile = fParseFileAll(sPathDir);
-    console.log(`   Found ${aoFile.length} .last.html files\n`);
+    aoFileHitp = fParseFileAllHitp(sPathDir);
+    console.log(`   Found ${aoFileHitp.length} .last.html files\n`);
   }
 
-  // ── 1. Structural checks (fast, no AI needed) ──────────────────────────────
-  console.log('🔍 Running structural checks...');
-  const aoIssueStruct = fRunChecksStructural(aoFile, sPathDir);
-  oReporter.fAddAll(aoIssueStruct);
+  // ── 1. Hitp checks (every file) ────────────────────────────────────────────
+  console.log('🔍 Running Hitp checks...');
+  oReporter.fAddAll(fRunChecksHitp(aoFileHitp, sPathDir));
 
-  // ── 2. AI semantic checks (requires DeepSeek API key) ─────────────────────
+  // ── 2. Mcs checks (files named Mcs* only) ─────────────────────────────────
+  const aoFileMcs = aoFileHitp
+    .filter(oFile => oFile.sNameFile.startsWith('Mcs'))
+    .map(oFile => fParseFile(oFile.sPathFile));
+  console.log(`\n🔍 Running Mcs checks (${aoFileMcs.length} Mcs files)...`);
+  oReporter.fAddAll(fRunChecksStructural(aoFileMcs, sPathDir));
+
+  // ── 3. AI semantic checks (Mcs files, requires DeepSeek API key) ──────────
   if (bUseAi) {
     console.log('\n🤖 Running AI semantic checks via DeepSeek...');
-    const aoIssueAi = await fRunChecksAi(aoFile);
-    oReporter.fAddAll(aoIssueAi);
+    oReporter.fAddAll(await fRunChecksAi(aoFileMcs));
   }
 
   oReporter.fPrint();
-
-  if (bSaveReport) {
-    oReporter.fSaveJson('./dirValid/validator-report.json');
-    oReporter.fSaveHtml('./dirValid/validator-report.html');
-  }
+  oReporter.fSaveHtml('./dirValid/validator-report.html');
 }
 
 fMain().catch(oErr => {

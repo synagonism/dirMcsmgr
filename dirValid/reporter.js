@@ -78,28 +78,6 @@ export function fReporter() {
     console.log('💡 Run with --report to save validator-report.json and validator-report.html\n');
   }
 
-  function fSaveJson(sPathOut) {
-    const oData = {
-      sGenerated: new Date().toISOString(),
-      oSummary: {
-        nTotal: aoIssue.length,
-        nError: fError().length,
-        nWarn: fWarn().length,
-        nInfo: fInfo().length,
-      },
-      aoIssue: aoIssue.map(oIssue => ({
-        sLevel: oIssue.sLevel,
-        sCode: oIssue.sCode,
-        sNameFile: oIssue.sNameFile,
-        sConcept: fTitleConcept(oIssue.sConcept),
-        nLine: oIssue.nLine ?? null,
-        sMessage: oIssue.sMessage,
-      })),
-    };
-    fs.writeFileSync(sPathOut, JSON.stringify(oData, null, 2), 'utf8');
-    console.log(`📊 JSON report saved: ${sPathOut}`);
-  }
-
   function fSaveHtml(sPathOut) {
     const sRows = aoIssue.map(oIssue => {
       const sLevel = oIssue.sLevel;
@@ -165,7 +143,7 @@ function filterRows(q) {
     console.log(`🌐 HTML report saved: ${sPathOut}`);
   }
 
-  return { fAdd, fAddAll, fPrint, fSaveJson, fSaveHtml };
+  return { fAdd, fAddAll, fPrint, fSaveHtml };
 }
 
 function fEsc(sIn) {

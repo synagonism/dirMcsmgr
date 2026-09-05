@@ -119,9 +119,13 @@ export function fFindLineAt(sHtmlIn, nIdx) {
  * OUTPUT: array of all unique href=values, no clsHide links.
  */
 export function fExtractContentHrefs(sHtmlIn) {
-  // Remove clsHide anchors entirely first
-  const sCleaned = sHtmlIn.replace(/<a\s+class="clsHide"[^>]*>[\s\S]*?<\/a>/g, '');
-  const rHref = /href="([^"]+)"/g;
+  // Drop <code> examples (escaped or real anchors there are not live links), then
+  // the clsHide self-anchors. Extract hrefs only from LITERAL <a …> tags, so an
+  // escaped example (&lt;a href="…"&gt;) is never mistaken for a real link.
+  const sCleaned = sHtmlIn
+    .replace(/<code\b[\s\S]*?<\/code>/gi, '')
+    .replace(/<a\s+class="clsHide"[^>]*>[\s\S]*?<\/a>/g, '');
+  const rHref = /<a\b[^>]*?\bhref="([^"]+)"/gi;
   const aLinks = [];
   let aMatch;
   while ((aMatch = rHref.exec(sCleaned)) !== null) aLinks.push(aMatch[1]);
