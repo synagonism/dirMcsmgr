@@ -13,8 +13,11 @@
     "dirMcsh": "validator.js"
   },
   "dependencies": {
+    "es6-promise-pool": "^2.5.0",
     "glob": "^11.0.0",
-    "ollama": "^0.5.18"
+    "n-readlines": "^3.4.1",
+    "ollama": "^0.5.18",
+    "ssh2-sftp-client": "^12.1.1"
   },
   "engines": {
     "node": ">=18.0.0"

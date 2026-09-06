@@ -73,8 +73,8 @@
         },
         "mcsv.docRootFolder": {
           "type": "string",
-          "default": "htdocs",
-          "description": "Folder name in the file path that marks the server document-root. The URL path is everything after it."
+          "default": "dirNodews",
+          "description": "Folder name in the file path that marks the server document-root. The URL path is everything after it. Defaults to 'dirNodews' to match server.mjs (web root = C:\\dirNodews)."
         },
         "mcsv.keybindingsPath": {
           "type": "string",

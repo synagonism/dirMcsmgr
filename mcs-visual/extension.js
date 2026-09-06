@@ -86,22 +86,28 @@ function fActivate(context) {
   // .last.html text editor (bound to Ctrl+Alt+P O in the user's keybindings).
   context.subscriptions.push(
     vscode.commands.registerCommand('mcsv.openByCode', async () => {
+      // Current McsHitp file (if any) — used only to prefill the prompt and as the
+      // first root candidate. Absent when invoked cold (e.g. from index.html), which
+      // is fine: the prompt opens empty and the root is inferred from the workspace.
       const oEd = vscode.window.activeTextEditor;
       const sCur = (oEd && oEd.document.uri.scheme === 'file' && /\.last\.html$/i.test(oEd.document.uri.fsPath))
         ? oEd.document.uri.fsPath : sVisualFile;
-      if (!sCur) { vscode.window.showWarningMessage('Mcsh-Visual: no current McsHitp file.'); return; }
-      const sCurCode = path.basename(sCur).replace(/\.last\.html$/i, '');
+      const sCurCode = sCur ? path.basename(sCur).replace(/\.last\.html$/i, '') : '';
       const sInput = await vscode.window.showInputBox({
         prompt: 'Open McsHitp file by code',
+        placeHolder: 'e.g. McsStn000005, HitpStnEcon000, Mcs000000',
         value: sCurCode,
-        valueSelection: [0, sCurCode.length],
+        valueSelection: sCurCode ? [0, sCurCode.length] : undefined,
       });
       if (!sInput) return;
       const sCode = sInput.trim().replace(/\.last\.html$/i, '');
-      const sRoot = fWorldviewRoot(sCur, sCurCode);
-      let sPath = fPathForCode(sRoot, sCode);
-      if (!sPath || !fs.existsSync(sPath)) sPath = fSearchByCode(sRoot, sCode);
-      if (!sPath || !fs.existsSync(sPath)) { vscode.window.showWarningMessage('Mcsh-Visual: no file for code “' + sCode + '”.'); return; }
+      // Resolve across candidate roots: fast deterministic path first, recursive
+      // search as the safety net. Handles the cold start (no current file).
+      const aRoots = fRootCandidates(sCur, sCurCode);
+      let sPath = '';
+      for (const sRoot of aRoots) { const p = fPathForCode(sRoot, sCode); if (p && fs.existsSync(p)) { sPath = p; break; } }
+      if (!sPath) for (const sRoot of aRoots) { const p = fSearchByCode(sRoot, sCode); if (p) { sPath = p; break; } }
+      if (!sPath) { vscode.window.showWarningMessage('Mcsh-Visual: no file for code “' + sCode + '”.'); return; }
       // A visual editor is open → reuse its single tab: navigate its iframe (the
       // bridge `nav` retargets the edit doc + source pane). Else open a fresh pair.
       const sUrl = fNavigateVisual ? fDisplayUrlForPath(sPath) : '';
@@ -434,6 +440,30 @@ function fOrigin() {
 }
 
 // --- open-by-code helpers --------------------------------------------------
+
+/**
+ * Ordered, de-duplicated worldview-root candidates for open-by-code. The current
+ * file's root comes first (fast path, preserves today's behaviour); the rest let
+ * the command work cold (no current .last.html — e.g. invoked from index.html):
+ *   - the active file's own folder (index.html at <root> → <root>);
+ *   - each workspace folder, plus its dirMcsh subfolder when present (workspace
+ *     opened at dirNodews → resolve inside dirNodews/dirMcsh).
+ * fSearchByCode later recurses under whichever of these actually holds the code.
+ */
+function fRootCandidates(sCur, sCurCode) {
+  const a = [];
+  const fAdd = (s) => { if (s && !a.some((x) => x.toLowerCase() === s.toLowerCase())) a.push(s); };
+  if (sCur) fAdd(fWorldviewRoot(sCur, sCurCode));
+  const oEd = vscode.window.activeTextEditor;
+  if (oEd && oEd.document.uri.scheme === 'file') fAdd(path.dirname(oEd.document.uri.fsPath));
+  for (const oWf of (vscode.workspace.workspaceFolders || [])) {
+    const sWf = oWf.uri.fsPath;
+    fAdd(sWf);
+    const sMcsh = path.join(sWf, 'dirMcsh');
+    try { if (fs.existsSync(sMcsh)) fAdd(sMcsh); } catch (e) { /* unreadable → skip */ }
+  }
+  return a;
+}
 
 /**
  * Worldview root (the folder that holds the dir<Cat> folders), inferred from the
