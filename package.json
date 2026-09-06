@@ -6,7 +6,8 @@
   "main": "validator.js",
   "scripts": {
     "check": "node validator.js",
-    "check:ai": "node validator.js --ai"
+    "check:ai": "node validator.js --ai",
+    "serve": "node server.mjs"
   },
   "bin": {
     "dirMcsh": "validator.js"

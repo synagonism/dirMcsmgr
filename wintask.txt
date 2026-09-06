@@ -1,0 +1,31 @@
+Disable-ScheduledTask -TaskName DirNodewsServer          # stop auto-starting
+Enable-ScheduledTask  -TaskName DirNodewsServer          # re-enable
+Unregister-ScheduledTask -TaskName DirNodewsServer -Confirm:$false   # remove entirely
+
+
+`DirNodewsServer` is the **Windows scheduled task** I created. It lives in **Task Scheduler**, in the root of the Task Scheduler Library (task path `\DirNodewsServer`).
+
+**To see it in the GUI:**
+1. Press `Win + R`, type `taskschd.msc`, Enter.
+2. Click **Task Scheduler Library** in the left pane.
+3. `DirNodewsServer` is in the list (top level, not inside a folder).
+
+**Or from PowerShell:**
+```powershell
+Get-ScheduledTask -TaskName DirNodewsServer | Select-Object TaskPath, TaskName, State
+```
+
+Let me show you its exact details:
+
+Here it is:
+
+- **Where:** Task Scheduler → **Task Scheduler Library** (task path `\` — the root, not in any subfolder)
+- **Name:** `DirNodewsServer`
+- **State:** Ready
+- **What it runs:** `wscript.exe "C:\dirNodews\start-server-hidden.vbs"` → which starts `node server.mjs`
+- **Trigger:** at logon
+- **Last run:** succeeded (result `0`)
+
+Open the GUI anytime with `Win + R` → `taskschd.msc` → click **Task Scheduler Library**, and you'll see `DirNodewsServer` in the top list.
+
+The related files live in `C:\dirNodews`: [server.mjs](C:/dirNodews/server.mjs) (the server) and [start-server-hidden.vbs](C:/dirNodews/start-server-hidden.vbs) (the launcher the task calls).

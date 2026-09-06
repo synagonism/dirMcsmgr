@@ -1,0 +1,27 @@
+# ===========================================================================
+# synagonism.net (Apache) — site root .htaccess
+# ===========================================================================
+
+# --- CORS: allow these two files to be fetched cross-origin -----------------
+# Existing rules (kept as-is): lets other origins load these files via JS.
+<Files "manifest.json">
+  Header set Access-Control-Allow-Origin: *
+  Header set Access-Control-Allow-Headers: "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding"
+  Header set Access-Control-Allow-Methods: "POST, GET, OPTIONS, DELETE, PUT"
+</Files>
+<Files "bksk-index.html">
+  Header set Access-Control-Allow-Origin: *
+  Header set Access-Control-Allow-Headers: "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding"
+  Header set Access-Control-Allow-Methods: "POST, GET, OPTIONS, DELETE, PUT"
+</Files>
+
+# --- Clean URL for the hit counter ------------------------------------------
+# Pages embed:  <script src="/counter?page=PAGEID"></script>
+# On the local Node server that path is handled directly. On Apache/PHP this
+# rule maps it to the existing PHPcount script so the counters keep working:
+#     /counter?page=PAGEID  ->  /dirPgm/dirCntr/counter.php?page=PAGEID
+# [QSA] preserves the ?page=... query string, [L] stops further rewriting.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^counter/?$ /dirPgm/dirCntr/counter.php [QSA,L]
+</IfModule>
