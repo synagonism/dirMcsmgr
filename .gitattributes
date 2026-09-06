@@ -1,0 +1,38 @@
+# Normalize line endings: text files are stored and checked out as LF.
+# Prevents CRLF drift on Windows so diffs stay clean.
+
+# Web / source assets edited by hand
+*.css   text eol=lf
+*.js    text eol=lf
+*.mjs   text eol=lf
+*.html  text eol=lf
+*.htm   text eol=lf
+*.json  text eol=lf
+*.svg   text eol=lf
+*.md    text eol=lf
+*.txt   text eol=lf
+*.xml   text eol=lf
+
+# Everything else: let Git detect text vs binary, and use LF for detected text
+*       text=auto eol=lf
+
+# Binary assets: never modify
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.webp  binary
+*.bmp   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
+*.eot   binary
+*.pdf   binary
+*.mp3   binary
+*.wav   binary
+*.ogg   binary
+*.mp4   binary
+*.wasm  binary
+*.zip   binary

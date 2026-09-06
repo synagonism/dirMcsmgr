@@ -1,4 +1,5 @@
 /*
+ * version.25-1-0.2026-09-06: links inherit color inside clsColor*, link color when activated.
  * version.25-0-0.2026-08-30: dirMcsmgr.
  * version.24-4-1.2026-08-24: break-word'.
  * version.24-4-0.2026-08-21: claude-code review'.
@@ -993,6 +994,20 @@ li.clsClicked::first-line {
 .clsColorYellow {color: var(--c-yellow);}
 .clsColorYellowBg {background-color: var(--c-yellowbg); color: var(--c-yellowbg-fg);}
 .clsColorWhite {color: white;}
+
+/* links inside a color class take the class color — UNTIL the block is activated
+   (clsHide chip clicked adds clsClickCnt), then the normal link color shows. */
+.clsColorBlue a:link:not(.clsClickCnt),     .clsColorBlue a:visited:not(.clsClickCnt),
+.clsColorBlueBg a:link:not(.clsClickCnt),   .clsColorBlueBg a:visited:not(.clsClickCnt),
+.clsColorGreen a:link:not(.clsClickCnt),    .clsColorGreen a:visited:not(.clsClickCnt),
+.clsColorGreenBg a:link:not(.clsClickCnt),  .clsColorGreenBg a:visited:not(.clsClickCnt),
+.clsColorRed a:link:not(.clsClickCnt),      .clsColorRed a:visited:not(.clsClickCnt),
+.clsColorRedBg a:link:not(.clsClickCnt),    .clsColorRedBg a:visited:not(.clsClickCnt),
+.clsColorYellow a:link:not(.clsClickCnt),   .clsColorYellow a:visited:not(.clsClickCnt),
+.clsColorYellowBg a:link:not(.clsClickCnt), .clsColorYellowBg a:visited:not(.clsClickCnt),
+.clsColorWhite a:link:not(.clsClickCnt),    .clsColorWhite a:visited:not(.clsClickCnt) {
+  color: inherit;
+}
 
 /* class.FONT */
 .clsFontGrExt {font-family: "Palatino Linotype";}
